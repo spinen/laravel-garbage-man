@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Garbage Man" default="build" basedir=".">
+
+    <property name="project_domain_directory" value="src"/>
+    <property name="project_type" value="package"/>
+    <property file="vendor/spinen/build_common/lib/default.properties"/>
+
+    <import file="vendor/spinen/build_common/lib/composer.xml"/>
+    <import file="vendor/spinen/build_common/lib/qa.xml"/>
+    <import file="vendor/spinen/build_common/lib/testing.xml"/>
+
+    <target name="build"
+            depends="qa.lint,phpcs,phpmd,phpunit"/>
+
+    <!-- These are temporary targets for mess detection and code style checks, that does not fail the build -->
+    <target name="phpcs" description="Checks for Spinen code-style violations. Includes PSR-2.">
+
+        <echo>Running code sniffer</echo>
+        <exec executable="${basedir}/vendor/bin/phpcs" failonerror="false">
+            <arg value="--standard=vendor/spinen/code_sniffs/src/Spinen/ruleset.xml"/>
+            <arg value="--warning-severity=0"/>
+            <arg value="--ignore=${code_sniffer_exclusions}"/>
+            <arg value="--report=checkstyle"/>
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml"/>
+            <arg path="${project_domain_directory}"/>
+        </exec>
+    </target>
+
+    <target name="phpmd" description="Checks for mess detector violations">
+
+        <echo>Running mess detector</echo>
+        <exec executable="${basedir}/vendor/bin/phpmd" failonerror="false">
+            <arg value="${project_domain_directory}"/>
+            <arg value="text"/>
+            <arg value="vendor/spinen/mess_detector_rules/src/rulesets/phpmd.xml"/>
+            <arg value="--reportfile"/>
+            <arg value="${basedir}/build/logs/pmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="${mess_detector_exclusions}"/>
+            <arg value="--minimumpriority"/>
+            <arg value="4"/>
+        </exec>
+    </target>
+</project>

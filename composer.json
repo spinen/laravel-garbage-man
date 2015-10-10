@@ -1,0 +1,48 @@
+{
+    "name": "spinen/laravel-garbage-man",
+    "description": "Cleans out the softdeleted records.",
+    "keywords": [
+        "softdelete",
+        "laravel",
+        "library",
+        "spinen"
+    ],
+    "license": "MIT",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Jimmy Puckett",
+            "email": "jimmy.puckett@spinen.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "illuminate/support": "5.1.*"
+    },
+    "require-dev": {
+        "illuminate/http": "5.1.*",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~4.0",
+        "psy/psysh": "0.4.*",
+        "spinen/build_common": "0.5.*",
+        "spinen/code_sniffs": "0.1.*",
+        "spinen/mess_detector_rules": "0.1.*",
+        "symfony/var-dumper": "2.7.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/Support/helper.php"
+        ],
+        "psr-4": {
+            "Spinen\\GarbageMan\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Spinen\\GarbageMan\\": "tests"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+}
