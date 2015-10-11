@@ -85,7 +85,7 @@ class PurgeCommand extends Command
                                 ->subDays($days);
 
         $count = $this->laravel->make($model)
-                               ->where('deleted_at', '>', $expiration)
+                               ->where('deleted_at', '<', $expiration)
                                ->onlyTrashed()
                                ->forceDelete();
 
