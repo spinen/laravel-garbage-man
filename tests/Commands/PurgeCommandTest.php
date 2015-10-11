@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Log\Writer as Log;
 use Mockery;
 use Spinen\GarbageMan\Commands\Stubs\PurgeCommandStub as PurgeCommand;
 use Spinen\GarbageMan\TestCase;
@@ -43,6 +44,11 @@ class PurgeCommandTests extends TestCase
     /**
      * @var Mockery\Mock
      */
+    protected $log_mock;
+
+    /**
+     * @var Mockery\Mock
+     */
     protected $output_formatter_mock;
 
     /**
@@ -56,7 +62,7 @@ class PurgeCommandTests extends TestCase
 
         $this->setUpMocks();
 
-        $this->command = new PurgeCommand($this->carbon_mock);
+        $this->command = new PurgeCommand($this->carbon_mock, $this->log_mock);
         $this->command->setLaravel($this->laravel_mock);
         $this->command->setInput($this->input_mock);
         $this->command->setOutput($this->output_mock);
@@ -76,6 +82,8 @@ class PurgeCommandTests extends TestCase
         $this->laravel_mock->shouldReceive('make')
                            ->with('config')
                            ->andReturn($this->config_mock);
+
+        $this->log_mock = Mockery::mock(Log::class);
 
         $this->input_mock = Mockery::mock(InputInterface::class);
 
@@ -104,10 +112,29 @@ class PurgeCommandTests extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'console' => 6,
+                              'log'     => 6,
+                          ]);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
                               'garbageman.schedule',
                               [],
                           ])
                           ->andReturn([]);
+
+        $this->log_mock->shouldReceive('notice')
+                       ->once()
+                       ->with('There were no models configured to purge.')
+                       ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
@@ -126,6 +153,20 @@ class PurgeCommandTests extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'console' => 6,
+                              'log'     => 6,
+                          ]);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
                               'garbageman.schedule',
                               [],
                           ])
@@ -140,6 +181,11 @@ class PurgeCommandTests extends TestCase
                                         Mockery::any(),
                                     ])
                                     ->andReturnNull();
+
+        $this->log_mock->shouldReceive('warning')
+                       ->once()
+                       ->with('The model [NoneExisting] was not found.')
+                       ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
@@ -158,12 +204,31 @@ class PurgeCommandTests extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'console' => 6,
+                              'log'     => 6,
+                          ]);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
                               'garbageman.schedule',
                               [],
                           ])
                           ->andReturn([
                               'NoOnlyTrashed' => 14,
                           ]);
+
+        $this->log_mock->shouldReceive('error')
+                       ->once()
+                       ->with('The model [NoOnlyTrashed] does not support soft deleting.')
+                       ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
@@ -182,12 +247,31 @@ class PurgeCommandTests extends TestCase
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'console' => 6,
+                              'log'     => 6,
+                          ]);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
                               'garbageman.schedule',
                               [],
                           ])
                           ->andReturn([
                               'NoForceDelete' => 14,
                           ]);
+
+        $this->log_mock->shouldReceive('error')
+                       ->once()
+                       ->with('The model [NoForceDelete] does not support soft deleting.')
+                       ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
@@ -203,6 +287,20 @@ class PurgeCommandTests extends TestCase
      */
     public function it_deletes_expired_records_for_models_with_soft_delete()
     {
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'console' => 6,
+                              'log'     => 6,
+                          ]);
+
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs([
@@ -287,14 +385,65 @@ class PurgeCommandTests extends TestCase
                            ->with('ModelTwo')
                            ->andReturn($model_two_mock);
 
+        $this->log_mock->shouldReceive('info')
+                       ->once()
+                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14.')
+                       ->andReturnNull();
+
         $this->output_mock->shouldReceive('writeln')
                           ->once()
                           ->with('<info>Purged 1 record(s) for ModelOne that was deleted before 14.</info>')
                           ->andReturnNull();
 
+        $this->log_mock->shouldReceive('info')
+                       ->once()
+                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30.')
+                       ->andReturnNull();
+
         $this->output_mock->shouldReceive('writeln')
                           ->once()
                           ->with('<info>Purged 0 record(s) for ModelTwo that was deleted before 30.</info>')
+                          ->andReturnNull();
+
+        $this->command->handle();
+    }
+
+    /**
+     * @test
+     * @group unit
+     */
+    public function it_defaults_to_log_even_if_the_configs_dont_have_needed_key()
+    {
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'bad_console' => 6,
+                              'bad_log'     => 6,
+                          ]);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.schedule',
+                              [],
+                          ])
+                          ->andReturn([]);
+
+        $this->log_mock->shouldReceive('notice')
+                       ->once()
+                       ->with('There were no models configured to purge.')
+                       ->andReturnNull();
+
+        $this->output_mock->shouldReceive('writeln')
+                          ->once()
+                          ->with('<comment>There were no models configured to purge.</comment>')
                           ->andReturnNull();
 
         $this->command->handle();
