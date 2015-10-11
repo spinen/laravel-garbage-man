@@ -17,10 +17,11 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "illuminate/support": "5.1.*"
+        "illuminate/support": "5.1.*",
+        "illuminate/console": "5.1.*",
+        "nesbot/carbon": "^1.20"
     },
     "require-dev": {
-        "illuminate/http": "5.1.*",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
         "psy/psysh": "0.4.*",
@@ -30,9 +31,6 @@
         "symfony/var-dumper": "2.7.*"
     },
     "autoload": {
-        "classmap": [
-            "src/Support/helper.php"
-        ],
         "psr-4": {
             "Spinen\\GarbageMan\\": "src"
         }
