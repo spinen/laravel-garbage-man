@@ -27,8 +27,8 @@ return [
     |   ],
     */
     'logging_level' => [
-        'console' => 6,
-        'log'     => 6,
+        'console' => env('GARBAGEMAN_CONSOLE_LOG_LEVEL', 6),
+        'log'     => env('GARBAGEMAN_LOG_LEVEL', 6),
     ],
 
     /*
