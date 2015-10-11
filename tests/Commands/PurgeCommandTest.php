@@ -247,7 +247,7 @@ class PurgeCommandTests extends TestCase
         $model_one_mock->shouldReceive('where')
                        ->withArgs([
                            'deleted_at',
-                           '>',
+                           '<',
                            $carbon_one_mock,
                        ])
                        ->andReturnSelf();
@@ -264,7 +264,7 @@ class PurgeCommandTests extends TestCase
         $model_two_mock->shouldReceive('where')
                        ->withArgs([
                            'deleted_at',
-                           '>',
+                           '<',
                            $carbon_two_mock,
                        ])
                        ->andReturnSelf();
