@@ -61,7 +61,7 @@ return [
     |
     | The age is in days for each model.  Here is an example...
     |
-    |   schedule' => [
+    |   'schedule' => [
     |       App\ModelOne::class => 14,
     |       App\ModelTwo::class => 30,
     |   ],
