@@ -107,15 +107,16 @@ class PurgeCommand extends Command
     /**
      * Fire the given event for the record being purged.
      *
-     * @param string $event
-     * @param Model  $model
-     * @param bool   $halt
+     * @param string    $event
+     * @param string    $model_name
+     * @param Model     $model
+     * @param bool|null $halt
      *
      * @return mixed
      */
-    protected function firePurgeEvent($event, Model $model, $halt = true)
+    protected function firePurgeEvent($event, $model_name, Model $model, $halt = true)
     {
-        $event = "garbageman.{$event}: " . get_class($model);
+        $event = "garbageman.{$event}: " . $model_name;
 
         $method = $halt ? 'until' : 'fire';
 
@@ -132,7 +133,7 @@ class PurgeCommand extends Command
     public function handle()
     {
         $this->fire_purge_events = $this->laravel->make('config')
-                      ->get('garbageman.fire_purge_events', $this->fire_purge_events);
+                                                 ->get('garbageman.fire_purge_events', $this->fire_purge_events);
 
         $this->configured_logging_level = $this->laravel->make('config')
                                                         ->get('garbageman.logging_level',
@@ -179,7 +180,7 @@ class PurgeCommand extends Command
                                ->where('deleted_at', '<', $expiration)
                                ->onlyTrashed();
 
-        $count = $this->purgeRecordsAsConfigured($query);
+        $count = $this->purgeRecordsAsConfigured($query, $model);
 
         $this->recordMessage(sprintf("Purged %s record(s) for %s that was deleted before %s.", $count, $model,
             $expiration->toIso8601String()));
@@ -193,10 +194,11 @@ class PurgeCommand extends Command
      * This is to allow events to get fired for each record if needed.
      *
      * @param Builder $query
+     * @param string  $model_name
      *
      * @return int
      */
-    protected function purgeRecordsAsConfigured(Builder $query)
+    protected function purgeRecordsAsConfigured(Builder $query, $model_name)
     {
         if ($this->fire_purge_events !== true) {
             $this->recordMessage("Deleting all the records in a single query statement.");
@@ -204,16 +206,16 @@ class PurgeCommand extends Command
             return $query->forceDelete();
         }
 
-        $this->recordMessage("Deleting each record separately & firing an event.");
+        $this->recordMessage("Deleting each record separately and firing events.");
 
         $records = $query->get();
 
         foreach ($records as $record) {
-            $this->firePurgeEvent('purging', $record);
+            $this->firePurgeEvent('purging', $model_name, $record);
 
             $record->forceDelete();
 
-            $this->firePurgeEvent('purged', $record);
+            $this->firePurgeEvent('purged', $model_name, $record);
         }
 
         return $records->count();
