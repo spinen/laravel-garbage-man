@@ -1,7 +1,7 @@
 # SPINEN's Laravel Garbage Man
 
-The softdeletes are great in laravel to make sure that some deleted data can be recovered.  This package, allows you to
-configure an array of models with how many days that you want the softdeleted data to stay in the database.
+The soft deletes are great in laravel to make sure that some deleted data can be recovered.  This package, allows you to
+configure an array of models with how many days that you want the soft deleted data to stay in the database.
 
 ## Build Status
 
@@ -14,9 +14,9 @@ configure an array of models with how many days that you want the softdeleted da
 
 ## Prerequisite
 
-As side from Laravel 5.x, there are X packages that are required
+As side from Laravel 5.x, there is 1 package that is required
 
-* 
+* nesbot/carbon
 
 ## Install
 
@@ -31,7 +31,7 @@ Add the Service Provider to `config/app.php`:
 ```php
 'providers' => [
     // ...
-    Spinen\BrowserFilter\GarbageManServiceProvider::class,
+    Spinen\GarbageMan\GarbageManServiceProvider::class,
 ];
 ```
 
@@ -41,6 +41,24 @@ Publish the package config file to `config/garbageman.php`:
 $ php artisan vendor:publish
 ```
 
-## Configure cleanup options
+## Using the command
+
+The command is registered with laravel as ```garbagemand:purge```.  You can run it one of 2 ways...
+
+1) from the command line ```php artisan garbageman:purge;```
+2) via scheduled task.
+
+To automatically run the script as a scheduled job, then add the following to the schedule method of App\Console\Kernel.php:
+
+```php
+$schedule->command('garbageman:purge')
+         ->daily();
+```
+
+You can use whatever schedule that you need to keep the records purged out.  Just review the list at http://laravel.com/docs/master/scheduling#schedule-frequency-options. 
+
+You can also use any of the advanced configuration options of the task scheduler like "Task Output" or "Task Hooks" as listed on the [laravel documentation](http://laravel.com/docs/master/scheduling).
+
+## Configure models to cleanup
 
 During the install process `config/garbageman.php` as copied to the project.  That file is fully documented.

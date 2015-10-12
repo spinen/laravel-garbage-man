@@ -3,6 +3,7 @@
 namespace Spinen\GarbageMan;
 
 use Illuminate\Support\ServiceProvider;
+use Spinen\GarbageMan\Commands\PurgeCommand;
 
 /**
  * Class GarbageManServiceProvider
@@ -18,13 +19,9 @@ class GarbageManServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $config_file = realpath(__DIR__ . '/config/garbageman.php');
-
         $this->publishes([
-            $config_file => $this->app['path.config'] . DIRECTORY_SEPARATOR . 'garbageman.php',
-        ]);
-
-        $this->mergeConfigFrom($config_file, 'garbageman');
+            realpath(__DIR__ . '/config/garbageman.php') => config_path('garbageman.php'),
+        ], 'config');
     }
 
     /**
@@ -34,6 +31,10 @@ class GarbageManServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('command.garbageman.purge', function ($app) {
+            return $app->make(PurgeCommand::class);
+        });
+
+        $this->commands('command.garbageman.purge');
     }
 }
