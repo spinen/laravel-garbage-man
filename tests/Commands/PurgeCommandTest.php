@@ -9,6 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Log\Writer as Log;
+use Iterator as Collection;
 use Mockery;
 use Spinen\GarbageMan\Commands\Stubs\PurgeCommandStub as PurgeCommand;
 use Spinen\GarbageMan\TestCase;
@@ -34,7 +35,7 @@ class PurgeCommandTests extends TestCase
     protected $command;
 
     /**
-     * @var PurgeCommand
+     * @var Mockery\Mock
      */
     protected $dispatcher_mock;
 
@@ -446,6 +447,212 @@ class PurgeCommandTests extends TestCase
         $this->output_mock->shouldReceive('writeln')
                           ->twice()
                           ->with('<info>Deleting all the records in a single query statement.</info>')
+                          ->andReturnNull();
+
+        $this->log_mock->shouldReceive('info')
+                       ->once()
+                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14.')
+                       ->andReturnNull();
+
+        $this->output_mock->shouldReceive('writeln')
+                          ->once()
+                          ->with('<info>Purged 1 record(s) for ModelOne that was deleted before 14.</info>')
+                          ->andReturnNull();
+
+        $this->log_mock->shouldReceive('info')
+                       ->once()
+                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30.')
+                       ->andReturnNull();
+
+        $this->output_mock->shouldReceive('writeln')
+                          ->once()
+                          ->with('<info>Purged 0 record(s) for ModelTwo that was deleted before 30.</info>')
+                          ->andReturnNull();
+
+        $this->command->handle();
+    }
+
+    /**
+     * @test
+     * @group unit
+     */
+    public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_fire_events(
+    )
+    {
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.fire_purge_events',
+                              false,
+                          ])
+                          ->andReturn(true);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'console' => 7,
+                              'log'     => 7,
+                          ]);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.schedule',
+                              [],
+                          ])
+                          ->andReturn([
+                              'ModelOne' => 14,
+                              'ModelTwo' => 30,
+                          ]);
+
+        $carbon_one_mock = $this->carbon_mock;
+
+        $carbon_two_mock = $this->carbon_mock;
+
+        $this->carbon_mock->shouldReceive('copy')
+                          ->twice()
+                          ->withNoArgs()
+                          ->andReturn($carbon_one_mock, $carbon_two_mock);
+
+        $carbon_one_mock->shouldReceive('subDays')
+                        ->once()
+                        ->with(14)
+                        ->andReturnSelf();
+
+        $carbon_one_mock->shouldReceive('toIso8601String')
+                        ->once()
+                        ->withNoArgs()
+                        ->andReturn(14);
+
+        $carbon_two_mock->shouldReceive('subDays')
+                        ->once()
+                        ->with(30)
+                        ->andReturnSelf();
+
+        $carbon_two_mock->shouldReceive('toIso8601String')
+                        ->once()
+                        ->withNoArgs()
+                        ->andReturn(30);
+
+        $record_one_mock = Mockery::mock(Model::class);
+        $record_one_mock->shouldReceive('forceDelete')
+                        ->once()
+                        ->withNoArgs()
+                        ->andReturnNull();
+
+        $collection_one_mock = Mockery::mock(Collection::class);
+        $this->mockArrayIterator($collection_one_mock, [$record_one_mock]);
+        $collection_one_mock->shouldReceive('count')
+                            ->once()
+                            ->withNoArgs()
+                            ->andReturn(1);
+
+        $builder_one_mock = Mockery::mock(Builder::class);
+        $builder_one_mock->shouldReceive('onlyTrashed')
+                         ->once()
+                         ->withNoArgs()
+                         ->andReturnSelf();
+        $builder_one_mock->shouldReceive('get')
+                         ->once()
+                         ->withNoArgs()
+                         ->andReturn($collection_one_mock);
+
+        $model_one_mock = Mockery::mock(Model::class);
+        $model_one_mock->shouldReceive('where')
+                       ->withArgs([
+                           'deleted_at',
+                           '<',
+                           $carbon_one_mock,
+                       ])
+                       ->andReturn($builder_one_mock);
+
+        $collection_two_mock = Mockery::mock(Collection::class);
+        $this->mockArrayIterator($collection_two_mock, []);
+        $collection_two_mock->shouldReceive('count')
+                            ->once()
+                            ->withNoArgs()
+                            ->andReturn(0);
+
+        $builder_two_mock = Mockery::mock(Builder::class);
+        $builder_two_mock->shouldReceive('onlyTrashed')
+                         ->once()
+                         ->withNoArgs()
+                         ->andReturnSelf();
+        $builder_two_mock->shouldReceive('get')
+                         ->once()
+                         ->withNoArgs()
+                         ->andReturn($collection_two_mock);
+
+        $model_two_mock = Mockery::mock(Model::class);
+        $model_two_mock->shouldReceive('where')
+                       ->withArgs([
+                           'deleted_at',
+                           '<',
+                           $carbon_two_mock,
+                       ])
+                       ->andReturn($builder_two_mock);
+
+        $this->laravel_mock->shouldReceive('make')
+                           ->once()
+                           ->with('ModelOne')
+                           ->andReturn($model_one_mock);
+
+        $this->laravel_mock->shouldReceive('make')
+                           ->once()
+                           ->with('ModelTwo')
+                           ->andReturn($model_two_mock);
+
+        $this->dispatcher_mock->shouldReceive('until')
+                              ->once()
+                              ->withArgs([
+                                  'garbageman.purging: ModelOne',
+                                  Mockery::any(),
+                              ])
+                              ->andReturnNull();
+
+        $this->dispatcher_mock->shouldReceive('until')
+                              ->once()
+                              ->withArgs([
+                                  'garbageman.purged: ModelOne',
+                                  Mockery::any(),
+                              ])
+                              ->andReturnNull();
+
+        $this->log_mock->shouldReceive('info')
+                       ->twice()
+                       ->with('Deleting each record separately and firing events.')
+                       ->andReturnNull();
+
+        $this->output_mock->shouldReceive('writeln')
+                          ->twice()
+                          ->with('<info>Deleting each record separately and firing events.</info>')
+                          ->andReturnNull();
+
+        $this->log_mock->shouldReceive('debug')
+                       ->once()
+                       ->with('Firing event [garbageman.purging: ModelOne] with method [until]')
+                       ->andReturnNull();
+
+        $this->output_mock->shouldReceive('writeln')
+                          ->once()
+                          ->with('Firing event [garbageman.purging: ModelOne] with method [until]')
+                          ->andReturnNull();
+
+        $this->log_mock->shouldReceive('debug')
+                       ->once()
+                       ->with('Firing event [garbageman.purged: ModelOne] with method [until]')
+                       ->andReturnNull();
+
+        $this->output_mock->shouldReceive('writeln')
+                          ->once()
+                          ->with('Firing event [garbageman.purged: ModelOne] with method [until]')
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
