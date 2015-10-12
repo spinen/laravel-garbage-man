@@ -519,6 +519,54 @@ class PurgeCommandTests extends TestCase
 
         $this->command->handle();
     }
+
+    /**
+     * @test
+     * @group unit
+     */
+    public function it_does_not_log_if_alert_is_higher_than_allowed()
+    {
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.fire_purge_events',
+                              false,
+                          ])
+                          ->andReturn(false);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.logging_level',
+                              [
+                                  'console' => 6,
+                                  'log'     => 6,
+                              ],
+                          ])
+                          ->andReturn([
+                              'console' => 0,
+                              'log'     => 6,
+                          ]);
+
+        $this->config_mock->shouldReceive('get')
+                          ->once()
+                          ->withArgs([
+                              'garbageman.schedule',
+                              [],
+                          ])
+                          ->andReturn([]);
+
+        $this->log_mock->shouldReceive('notice')
+                       ->once()
+                       ->with('There were no models configured to purge.')
+                       ->andReturnNull();
+
+        $this->output_mock->shouldReceive('writeln')
+                          ->never()
+                          ->withAnyargs();
+
+        $this->command->handle();
+    }
 }
 
 $fake_models = [
