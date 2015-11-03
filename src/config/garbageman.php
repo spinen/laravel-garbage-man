@@ -4,6 +4,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fire events on purge of each record
+    |--------------------------------------------------------------------------
+    |
+    | Allow hook into the purge of each record by throwing events before & after
+    | deleting of each record.  There are 2 events thrown:
+    |
+    |       1) garbageman.purging:<full/model/name>
+    |       2) garbageman.purged:<full/model/name>
+    |
+    | The model is passed with each of the events.  The "purging" event is thrown
+    | just before the actual delete & the purged is thrown just after the actual
+    | delete.
+    |
+    | This is an expensive operation as it requires a sql command for each record
+    | to delete so that the record can be thrown with the events.  Therefore,
+    | unless you need to catch the events to preform some other action, leave
+    | this false to allow all records per model to get deleted with a single
+    | sql call.
+    */
+    'fire_purge_events' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Level to log
     |--------------------------------------------------------------------------
     |
@@ -38,7 +61,7 @@ return [
     |
     | The age is in days for each model.  Here is an example...
     |
-    |   schedule' => [
+    |   'schedule' => [
     |       App\ModelOne::class => 14,
     |       App\ModelTwo::class => 30,
     |   ],

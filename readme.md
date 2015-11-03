@@ -7,10 +7,8 @@ configure an array of models with how many days that you want the soft deleted d
 
 | Branch | Status |
 | ------ | :----: |
-| Develop | [![Build Status](https://ci.spinen.net/buildStatus/icon?job=laravel-garbage-man-develop)](https://ci.spinen.net/view/Libraries/job/laravel-garbage-man-develop/) |
-| Feature | [![Build Status](https://ci.spinen.net/buildStatus/icon?job=laravel-garbage-man-feature__)](https://ci.spinen.net/view/Libraries/job/laravel-garbage-man-feature__/) |
-| Master | [![Build Status](https://ci.spinen.net/buildStatus/icon?job=laravel-garbage-man-master)](https://ci.spinen.net/view/Libraries/job/laravel-garbage-man-master/) |
-| Release | [![Build Status](https://ci.spinen.net/buildStatus/icon?job=laravel-garbage-man-release__)](https://ci.spinen.net/view/Libraries/job/laravel-garbage-man-release__/) |
+| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=develop)](https://travis-ci.org/spinen/laravel-garbage-man) |
+| Master | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=master)](https://travis-ci.org/spinen/laravel-garbage-man) |
 
 ## Prerequisite
 

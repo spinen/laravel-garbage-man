@@ -4,8 +4,16 @@ namespace Spinen\GarbageMan\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Log\Writer as Log;
 
+/**
+ * Class PurgeCommand
+ *
+ * @package Spinen\GarbageMan\Commands
+ */
 class PurgeCommand extends Command
 {
     /**
@@ -25,12 +33,30 @@ class PurgeCommand extends Command
     /**
      * The configured level to log information.
      *
+     * These values are used as the default in case there are not any configured.
+     *
      * @var array
      */
     protected $configured_logging_level = [
         'console' => 6,
         'log'     => 6,
     ];
+
+    /**
+     * Dispatcher instance.
+     *
+     * @var Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * Fire events when purging?
+     *
+     * This value is used as the default in case there it is not configured.
+     *
+     * @var bool
+     */
+    protected $fire_purge_events = false;
 
     /**
      * Logging instance.
@@ -65,16 +91,38 @@ class PurgeCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param Carbon $carbon
-     * @param Log    $log
+     * @param Carbon     $carbon
+     * @param Dispatcher $dispatcher
+     * @param Log        $log
      */
-    public function __construct(Carbon $carbon, Log $log)
+    public function __construct(Carbon $carbon, Dispatcher $dispatcher, Log $log)
     {
         parent::__construct();
 
         $this->now = $carbon->now();
-
+        $this->dispatcher = $dispatcher;
         $this->log = $log;
+    }
+
+    /**
+     * Fire the given event for the record being purged.
+     *
+     * @param string    $event
+     * @param string    $model_name
+     * @param Model     $model
+     * @param bool|null $halt
+     *
+     * @return mixed
+     */
+    protected function firePurgeEvent($event, $model_name, Model $model, $halt = true)
+    {
+        $event = "garbageman.{$event}: " . $model_name;
+
+        $method = $halt ? 'until' : 'fire';
+
+        $this->recordMessage(sprintf("Firing event [%s] with method [%s]", $event, $method), 'debug');
+
+        return $this->dispatcher->{$method}($event, $model);
     }
 
     /**
@@ -84,6 +132,9 @@ class PurgeCommand extends Command
      */
     public function handle()
     {
+        $this->fire_purge_events = $this->laravel->make('config')
+                                                 ->get('garbageman.fire_purge_events', $this->fire_purge_events);
+
         $this->configured_logging_level = $this->laravel->make('config')
                                                         ->get('garbageman.logging_level',
                                                             $this->configured_logging_level);
@@ -125,10 +176,11 @@ class PurgeCommand extends Command
         $expiration = $this->now->copy()
                                 ->subDays($days);
 
-        $count = $this->laravel->make($model)
+        $query = $this->laravel->make($model)
                                ->where('deleted_at', '<', $expiration)
-                               ->onlyTrashed()
-                               ->forceDelete();
+                               ->onlyTrashed();
+
+        $count = $this->purgeRecordsAsConfigured($query, $model);
 
         $this->recordMessage(sprintf("Purged %s record(s) for %s that was deleted before %s.", $count, $model,
             $expiration->toIso8601String()));
@@ -136,6 +188,47 @@ class PurgeCommand extends Command
         return $count;
     }
 
+    /**
+     * Either purge all the records at once or loop through them one by one.
+     *
+     * This is to allow events to get fired for each record if needed.
+     *
+     * @param Builder $query
+     * @param string  $model_name
+     *
+     * @return int
+     */
+    protected function purgeRecordsAsConfigured(Builder $query, $model_name)
+    {
+        if ($this->fire_purge_events !== true) {
+            $this->recordMessage("Deleting all the records in a single query statement.");
+
+            return $query->forceDelete();
+        }
+
+        $this->recordMessage("Deleting each record separately and firing events.");
+
+        $records = $query->get();
+
+        foreach ($records as $record) {
+            $this->firePurgeEvent('purging', $model_name, $record);
+
+            $record->forceDelete();
+
+            $this->firePurgeEvent('purged', $model_name, $record);
+        }
+
+        return $records->count();
+    }
+
+    /**
+     * Log the action that was taken on the record.
+     *
+     * @param string      $message
+     * @param string|null $level
+     *
+     * @return void
+     */
     protected function recordMessage($message, $level = null)
     {
         if (is_null($level)) {
@@ -150,7 +243,7 @@ class PurgeCommand extends Command
             'error'     => 'error',
             'info'      => 'info',
             'notice'    => 'comment',
-            'warning'   => 'warn',
+            'warning'   => 'warn', // NOTE: Prior to 5.1.10, there was not a warning, so that is the minimum version
         ];
 
         if ($this->supposedToLogAtThisLevel($level, 'log')) {
