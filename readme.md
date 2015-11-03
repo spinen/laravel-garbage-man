@@ -1,6 +1,6 @@
 # SPINEN's Laravel Garbage Man
 
-The soft deletes are great in laravel to make sure that some deleted data can be recovered.  This package, allows you to
+The soft deletes are great in Laravel to make sure that some deleted data can be recovered. This package allows you to
 configure an array of models with how many days that you want the soft deleted data to stay in the database.
 
 ## Build Status
@@ -41,7 +41,7 @@ $ php artisan vendor:publish
 
 ## Using the command
 
-The command is registered with laravel as ```garbagemand:purge```.  You can run it one of 2 ways...
+The command is registered with laravel as ```garbageman:purge```.  You can run it one of 2 ways...
 
 1) from the command line ```php artisan garbageman:purge;```
 2) via scheduled task.
@@ -53,10 +53,10 @@ $schedule->command('garbageman:purge')
          ->daily();
 ```
 
-You can use whatever schedule that you need to keep the records purged out.  Just review the list at http://laravel.com/docs/master/scheduling#schedule-frequency-options. 
+You can use whatever schedule that you need to keep the records purged out. Just review the list at http://laravel.com/docs/master/scheduling#schedule-frequency-options. 
 
-You can also use any of the advanced configuration options of the task scheduler like "Task Output" or "Task Hooks" as listed on the [laravel documentation](http://laravel.com/docs/master/scheduling).
+You can also use any of the advanced configuration options of the task scheduler like "Task Output" or "Task Hooks" as listed on the [Laravel documentation](http://laravel.com/docs/master/scheduling).
 
 ## Configure models to cleanup
 
-During the install process `config/garbageman.php` as copied to the project.  That file is fully documented.
+During the install process `config/garbageman.php` as copied to the project. That file is fully documented.
