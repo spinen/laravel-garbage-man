@@ -243,7 +243,7 @@ class PurgeCommand extends Command
             'error'     => 'error',
             'info'      => 'info',
             'notice'    => 'comment',
-            'warning'   => 'warn',
+            'warning'   => 'warn', // NOTE: Prior to 5.1.10, there was not a warning, so that is the minimum version
         ];
 
         if ($this->supposedToLogAtThisLevel($level, 'log')) {
