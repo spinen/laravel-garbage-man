@@ -12,9 +12,9 @@ configure an array of models with how many days that you want the soft deleted d
 
 ## Prerequisite
 
-As side from Laravel 5.x, there is 1 package that is required
+As side from Laravel >= 5.1.10 (5.1.10 is the first version that had the warn method, so that is the minimum for logging), there is 1 package that is required
 
-* nesbot/carbon
+* [nesbot/carbon](https://github.com/briannesbitt/Carbon)
 
 ## Install
 
@@ -43,8 +43,8 @@ $ php artisan vendor:publish
 
 The command is registered with laravel as ```garbageman:purge```.  You can run it one of 2 ways...
 
-1) from the command line ```php artisan garbageman:purge;```
-2) via scheduled task.
+1. from the command line ```php artisan garbageman:purge;```
+2. via scheduled task.
 
 To automatically run the script as a scheduled job, then add the following to the schedule method of App\Console\Kernel.php:
 
