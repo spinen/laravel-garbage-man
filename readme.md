@@ -22,22 +22,22 @@ logging), there is 1 package that is required
 Install Garbage Man:
 
 ```bash
-$ composer require spinen/laravel-garbage-man
+    $ composer require spinen/laravel-garbage-man
 ```
 
 Add the Service Provider to `config/app.php`:
 
 ```php
-'providers' => [
-    // ...
-    Spinen\GarbageMan\GarbageManServiceProvider::class,
-];
+    'providers' => [
+        // ...
+        Spinen\GarbageMan\GarbageManServiceProvider::class,
+    ];
 ```
 
 Publish the package config file to `config/garbageman.php`:
 
 ```bash
-$ php artisan vendor:publish
+    $ php artisan vendor:publish
 ```
 
 ## Using the command
@@ -51,8 +51,8 @@ To automatically run the script as a scheduled job, then add the following to th
 App\Console\Kernel.php:
 
 ```php
-$schedule->command('garbageman:purge')
-         ->daily();
+    $schedule->command('garbageman:purge')
+             ->daily();
 ```
 
 You can use whatever schedule that you need to keep the records purged out. Just review the list at 
