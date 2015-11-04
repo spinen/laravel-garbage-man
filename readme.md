@@ -1,5 +1,10 @@
 # SPINEN's Laravel Garbage Man
 
+[![Latest Stable Version](https://poser.pugx.org/spinen/laravel-garbage-man/v/stable)](https://packagist.org/packages/spinen/laravel-garbage-man)
+[![Total Downloads](https://poser.pugx.org/spinen/laravel-garbage-man/downloads)](https://packagist.org/packages/spinen/laravel-garbage-man)
+[![Latest Unstable Version](https://poser.pugx.org/spinen/laravel-garbage-man/v/unstable)](https://packagist.org/packages/spinen/laravel-garbage-man)
+[![License](https://poser.pugx.org/spinen/laravel-garbage-man/license)](https://packagist.org/packages/spinen/laravel-garbage-man)
+
 The soft deletes are great in Laravel to make sure that some deleted data can be recovered. This package allows you to configure an array of models with how many days that you want the soft deleted data to stay in the database.
 
 ## Build Status
