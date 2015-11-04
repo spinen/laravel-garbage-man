@@ -71,12 +71,12 @@ There are 3 main configuration items...
 2. Logging level - Level to log.
 3. Schedule - Models & number of days to allow the soft deleted record to stay.
 
-### Fire purge events (fire_purge_events)
+### Fire purge events (fire\_purge\_events)
 Allow hook into the purge of each record by throwing events before & after deleting of each record. There are 2 events 
 thrown:
 
-* garbageman.purging:<full/model/name>
-* garbageman.purged:<full/model/name>
+* garbageman.purging:\<full/model/name\>
+* garbageman.purged:\<full/model/name\>
 
 The model is passed with each of the events. The "purging" event is thrown just *before* the actual delete & "purged" is thrown just *after* the actual delete.
 
