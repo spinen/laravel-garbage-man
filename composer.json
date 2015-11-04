@@ -1,6 +1,6 @@
 {
     "name": "spinen/laravel-garbage-man",
-    "description": "Cleans out the softdeleted records.",
+    "description": "Scheduled job to clean out Laravel's soft deleted records at configured interval.",
     "keywords": [
         "softdelete",
         "laravel",
