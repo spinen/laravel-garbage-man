@@ -1,13 +1,19 @@
 # SPINEN's Laravel Garbage Man
 
+[![Latest Stable Version](https://poser.pugx.org/spinen/laravel-garbage-man/v/stable)](https://packagist.org/packages/spinen/laravel-garbage-man)
+[![Total Downloads](https://poser.pugx.org/spinen/laravel-garbage-man/downloads)](https://packagist.org/packages/spinen/laravel-garbage-man)
+[![Latest Unstable Version](https://poser.pugx.org/spinen/laravel-garbage-man/v/unstable)](https://packagist.org/packages/spinen/laravel-garbage-man)
+[![Dependency Status](https://www.versioneye.com/php/spinen:laravel-garbage-man/0.1.1/badge.svg)](https://www.versioneye.com/php/spinen:laravel-garbage-man/0.1.1)
+[![License](https://poser.pugx.org/spinen/laravel-garbage-man/license)](https://packagist.org/packages/spinen/laravel-garbage-man)
+
 The soft deletes are great in Laravel to make sure that some deleted data can be recovered. This package allows you to configure an array of models with how many days that you want the soft deleted data to stay in the database.
 
 ## Build Status
 
-| Branch | Status |
-| ------ | :----: |
-| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=develop)](https://travis-ci.org/spinen/laravel-garbage-man) |
-| Master | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=master)](https://travis-ci.org/spinen/laravel-garbage-man) |
+| Branch | Status | Coverage |
+| ------ | :----: | :------: |
+| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=develop)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-garbage-man/badge.svg?branch=develop&service=github)](https://coveralls.io/github/spinen/laravel-garbage-man?branch=develop) |
+| Master | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=master)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-garbage-man/badge.svg?branch=master&service=github)](https://coveralls.io/github/spinen/laravel-garbage-man?branch=master) |
 
 ## Prerequisite
 
