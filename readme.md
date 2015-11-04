@@ -12,8 +12,7 @@ configure an array of models with how many days that you want the soft deleted d
 
 ## Prerequisite
 
-As side from Laravel >= 5.1.10 (5.1.10 is the first version that had the warn method, so that is the minimum for 
-logging), there is 1 package that is required
+As side from Laravel >= 5.1.10 (5.1.10 is the first version that had the warn method, so that is the minimum for logging), there is 1 package that is required.
 
 * [nesbot/carbon](https://github.com/briannesbitt/Carbon)
 
@@ -79,12 +78,9 @@ thrown:
 * garbageman.purging:<full/model/name>
 * garbageman.purged:<full/model/name>
 
-The model is passed with each of the events.  The "purging" event is thrown just before the actual delete & the purged 
-is thrown just after the actual delete.
+The model is passed with each of the events. The "purging" event is thrown just *before* the actual delete & "purged" is thrown just *after* the actual delete.
 
-This is an expensive operation as it requires a sql command for each record to delete so that the record can be thrown 
-with the events.  Therefore, unless you need to catch the events to preform some other action, leave this false to allow
- all records per model to get deleted with a single sql call.
+This is an expensive operation as it requires a SQL command for each record to delete so that the record can be thrown with the events. Therefore, unless you need to catch the events to preform some other action, leave this false to allow all records per model to get deleted with a single SQL call.
 
 ### Logging level (logging_level)
 The level that log messages are generated, which will display information on the console output and in the logs.
