@@ -47,7 +47,7 @@ The command is registered with laravel as ```garbageman:purge```.  You can run i
 2. via scheduled task.
 
 To automatically run the script as a scheduled job, then add the following to the schedule method of 
-App\Console\Kernel.php:
+`App\Console\Kernel.php`:
 
 ```php
     $schedule->command('garbageman:purge')
