@@ -109,8 +109,8 @@ There is a key for the console & one for the log.  Here is an example...
     ],
 ```
 
-Alternatively, you can set the levels with environmental variables ```GARBAGEMAN_CONSOLE_LOG_LEVEL``` and 
-```GARBAGEMAN_LOG_LEVEL```.
+Alternatively, you can set the levels with environmental variables ```GARBAGEMAN_CONSOLE_LOG_LEVEL``` 
+and ```GARBAGEMAN_LOG_LEVEL```.
 
 ### Schedule (schedule)
 
