@@ -1,7 +1,6 @@
 # SPINEN's Laravel Garbage Man
 
-The soft deletes are great in Laravel to make sure that some deleted data can be recovered. This package allows you to
-configure an array of models with how many days that you want the soft deleted data to stay in the database.
+The soft deletes are great in Laravel to make sure that some deleted data can be recovered. This package allows you to configure an array of models with how many days that you want the soft deleted data to stay in the database.
 
 ## Build Status
 
@@ -62,8 +61,7 @@ listed on the [Laravel documentation](http://laravel.com/docs/master/scheduling)
 
 ## Configuration
 
-During the install process `config/garbageman.php` is copied to the config directory of the project. That file is fully 
-documented.  You will need to make the changes to that file to suit your needs.
+During the install process `config/garbageman.php` is copied to the config directory of the project. That file is fully documented.  You will need to make the changes to that file to suit your needs.
 
 There are 3 main configuration items...
 
@@ -72,8 +70,7 @@ There are 3 main configuration items...
 3. Schedule - Models & number of days to allow the soft deleted record to stay.
 
 ### Fire purge events (fire\_purge\_events)
-Allow hook into the purge of each record by throwing events before & after deleting of each record. There are 2 events 
-thrown:
+Allow hook into the purge of each record by throwing events before & after deleting of each record. There are 2 events thrown:
 
 * garbageman.purging:\<full/model/name\>
 * garbageman.purged:\<full/model/name\>
@@ -105,8 +102,7 @@ There is a key for the console & one for the log. Here is an example...
     ],
 ```
 
-Alternatively, you can set the levels with environmental variables ```GARBAGEMAN_CONSOLE_LOG_LEVEL``` 
-and ```GARBAGEMAN_LOG_LEVEL```.
+Alternatively, you can set the levels with environmental variables ```GARBAGEMAN_CONSOLE_LOG_LEVEL``` and ```GARBAGEMAN_LOG_LEVEL```.
 
 ### Schedule (schedule)
 
