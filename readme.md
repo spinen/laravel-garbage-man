@@ -55,7 +55,7 @@ App\Console\Kernel.php:
 ```
 
 You can use whatever schedule that you need to keep the records purged out. Just review the list at 
-http://laravel.com/docs/master/scheduling#schedule-frequency-options. 
+[http://laravel.com/docs/master/scheduling#schedule-frequency-options](http://laravel.com/docs/master/scheduling#schedule-frequency-options).
 
 You can also use any of the advanced configuration options of the task scheduler like "Task Output" or "Task Hooks" as 
 listed on the [Laravel documentation](http://laravel.com/docs/master/scheduling).
