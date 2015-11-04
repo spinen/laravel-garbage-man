@@ -1,7 +1,7 @@
 # SPINEN's Laravel Garbage Man
 
 The soft deletes are great in Laravel to make sure that some deleted data can be recovered. This package allows you to
-configure an array of models with how many days that you want the soft deleted data to stay in the database. 
+configure an array of models with how many days that you want the soft deleted data to stay in the database.
 
 ## Build Status
 
@@ -100,7 +100,7 @@ The level that log messages are generated, which will display information on the
 | 6 (default) | Info: informational messages |
 | 7 | Debug: debug - level messages |
  
-There is a key for the console & one for the log.  Here is an example...
+There is a key for the console & one for the log. Here is an example...
 
 ```php
     'logging_level' => [
@@ -114,7 +114,7 @@ and ```GARBAGEMAN_LOG_LEVEL```.
 
 ### Schedule (schedule)
 
-The age is in days for each model.  Here is an example...   
+The age is in days for each model. Here is an example...
 
 ```php
     'schedule' => [
@@ -122,5 +122,4 @@ The age is in days for each model.  Here is an example...
         App\ModelTwo::class => 30,
     ], 
 ```
-This would purge any ModelOne's, that were deleted over 14 days ago and any ModelTwo's that are were deleted over 30 
-days ago.
+This would purge any ModelOnes that were deleted over 14 days ago and any ModelTwos that were deleted over 30 days ago.
