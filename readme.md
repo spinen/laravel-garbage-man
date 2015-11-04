@@ -69,7 +69,7 @@ There are 3 main configuration items...
 
 1. Fire purge events - Fire events on purge of each record.
 2. Logging level - Level to log.
-3. Schedule - Models & age to allow the soft deleted record to stay.
+3. Schedule - Models & number of days to allow the soft deleted record to stay.
 
 ### Fire purge events (fire_purge_events)
 Allow hook into the purge of each record by throwing events before & after deleting of each record. There are 2 events 
