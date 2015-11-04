@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Fire events on purge of each record
+    | Fire events on purge of each record.
     |--------------------------------------------------------------------------
     |
     | Allow hook into the purge of each record by throwing events before & after
@@ -27,20 +27,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Level to log
+    | Level to log.
     |--------------------------------------------------------------------------
     |
     | The level that log messages are generated, which will display information
     | on the console output and in the logs.
     |
-    |       0       Emergency: system is unusable
-    |       1       Alert: action must be taken immediately
-    |       2       Critical: critical conditions
-    |       3       Error: error conditions
-    |       4       Warning: warning conditions
-    |       5       Notice: normal but significant condition
-    |       6       Info: informational messages
-    |       7       Debug: debug - level messages
+    |       0           Emergency: system is unusable
+    |       1           Alert: action must be taken immediately
+    |       2           Critical: critical conditions
+    |       3           Error: error conditions
+    |       4           Warning: warning conditions
+    |       5           Notice: normal but significant condition
+    |       6 (default) Info: informational messages
+    |       7           Debug: debug - level messages
     |
     | There is a key for the console & one for the log.  Here is an example...
     |
