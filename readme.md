@@ -4,10 +4,10 @@ The soft deletes are great in Laravel to make sure that some deleted data can be
 
 ## Build Status
 
-| Branch | Status |
-| ------ | :----: |
-| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=develop)](https://travis-ci.org/spinen/laravel-garbage-man) |
-| Master | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=master)](https://travis-ci.org/spinen/laravel-garbage-man) |
+| Branch | Status | Coverage |
+| ------ | :----: | :------: |
+| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=develop)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-garbage-man/badge.svg?branch=develop&service=github)](https://coveralls.io/github/spinen/laravel-garbage-man?branch=develop) |
+| Master | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=master)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-garbage-man/badge.svg?branch=master&service=github)](https://coveralls.io/github/spinen/laravel-garbage-man?branch=master) |
 
 ## Prerequisite
 
