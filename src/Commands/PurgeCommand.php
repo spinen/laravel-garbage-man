@@ -136,8 +136,7 @@ class PurgeCommand extends Command
                                                  ->get('garbageman.fire_purge_events', $this->fire_purge_events);
 
         $this->logging_level = $this->laravel->make('config')
-                                                        ->get('garbageman.logging_level',
-                                                            $this->logging_level);
+                                             ->get('garbageman.logging_level', $this->logging_level);
 
         $schedule = $this->laravel->make('config')
                                   ->get('garbageman.schedule', []);
