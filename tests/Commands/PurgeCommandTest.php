@@ -200,6 +200,11 @@ class PurgeCommandTests extends TestCase
                               'NoneExisting' => 14,
                           ]);
 
+        // Newer versions of laravel style, so give it if not set
+        $this->output_formatter_mock->shouldReceive('hasStyle')
+                                    ->with('warning')
+                                    ->andReturn(false);
+
         $this->output_formatter_mock->shouldReceive('setStyle')
                                     ->once()
                                     ->withArgs([
