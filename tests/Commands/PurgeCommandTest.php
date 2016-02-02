@@ -491,22 +491,22 @@ class PurgeCommandTests extends TestCase
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14.')
+                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14.</info>'))
+                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30.')
+                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30.</info>'))
+                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'))
                           ->andReturnNull();
 
         $this->command->handle();
@@ -697,22 +697,22 @@ class PurgeCommandTests extends TestCase
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14.')
+                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14.</info>'))
+                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30.')
+                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30.</info>'))
+                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'))
                           ->andReturnNull();
 
         $this->command->handle();
