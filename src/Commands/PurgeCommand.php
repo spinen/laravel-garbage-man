@@ -181,7 +181,7 @@ class PurgeCommand extends Command
 
         $count = $this->purgeRecordsAsConfigured($query, $model);
 
-        $this->recordMessage(sprintf("Purged %s record(s) for %s that was deleted before %s.", $count, $model,
+        $this->recordMessage(sprintf("Purged %s record(s) for %s that was deleted before %s days ago.", $count, $model,
             $expiration->toIso8601String()));
 
         return $count;
