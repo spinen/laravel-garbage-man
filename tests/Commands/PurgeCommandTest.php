@@ -110,7 +110,7 @@ class PurgeCommandTests extends TestCase
      * Pad the number of arguments needed for console output
      *
      * In Laravel 5.2, they added the verbosity to the writln calls, so we need to account for that parameter in version
-     * 5.2, but not in 5.1.  I really don't like this solution, because we are a little too coupled to the Command class
+     * 5.2, but not in 5.1. I really don't like this solution, because we are a little too coupled to the Command class
      * which we do not own, but I really cannot come up with a better way to assert that the correct info is being
      * sent to the console.
      *
