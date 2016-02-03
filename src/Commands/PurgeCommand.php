@@ -37,7 +37,7 @@ class PurgeCommand extends Command
      *
      * @var array
      */
-    protected $configured_logging_level = [
+    protected $logging_level = [
         'console' => 6,
         'log'     => 6,
     ];
@@ -135,9 +135,8 @@ class PurgeCommand extends Command
         $this->fire_purge_events = $this->laravel->make('config')
                                                  ->get('garbageman.fire_purge_events', $this->fire_purge_events);
 
-        $this->configured_logging_level = $this->laravel->make('config')
-                                                        ->get('garbageman.logging_level',
-                                                            $this->configured_logging_level);
+        $this->logging_level = $this->laravel->make('config')
+                                             ->get('garbageman.logging_level', $this->logging_level);
 
         $schedule = $this->laravel->make('config')
                                   ->get('garbageman.schedule', []);
@@ -182,8 +181,9 @@ class PurgeCommand extends Command
 
         $count = $this->purgeRecordsAsConfigured($query, $model);
 
-        $this->recordMessage(sprintf("Purged %s record(s) for %s that was deleted before %s.", $count, $model,
-            $expiration->toIso8601String()));
+        $this->recordMessage(
+            sprintf("Purged %s record(s) for %s that was deleted before %s days ago.", $count, $model, $expiration->toIso8601String())
+        );
 
         return $count;
     }
@@ -267,10 +267,10 @@ class PurgeCommand extends Command
      */
     protected function supposedToLogAtThisLevel($level, $type)
     {
-        if (!array_key_exists($type, $this->configured_logging_level)) {
+        if (!array_key_exists($type, $this->logging_level)) {
             return true;
         }
 
-        return $this->log_levels[$level] <= $this->configured_logging_level[$type];
+        return $this->log_levels[$level] <= $this->logging_level[$type];
     }
 }

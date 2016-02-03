@@ -3,6 +3,7 @@
 namespace Spinen\GarbageMan\Commands;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Log\Writer as Log;
 use Iterator as Collection;
 use Mockery;
+use ReflectionClass;
 use Spinen\GarbageMan\Commands\Stubs\PurgeCommandStub as PurgeCommand;
 use Spinen\GarbageMan\TestCase;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
@@ -105,6 +107,39 @@ class PurgeCommandTests extends TestCase
     }
 
     /**
+     * Pad the number of arguments needed for console output
+     *
+     * In Laravel 5.2, they added the verbosity to the writln calls, so we need to account for that parameter in version
+     * 5.2, but not in 5.1. I really don't like this solution, because we are a little too coupled to the Command class
+     * which we do not own, but I really cannot come up with a better way to assert that the correct info is being
+     * sent to the console.
+     *
+     * @see https://github.com/laravel/framework/commit/2f167031ca7d9660d3524d16cbba24eae5c759d7
+     *
+     * @param $line
+     *
+     * @return array
+     */
+    private function checkVerbosity($line)
+    {
+        // Since we are "mocking out" method_exist below, then try to reflect the method
+        $reflection = new ReflectionClass(PurgeCommand::class);
+
+       try {
+           $reflection->getMethod('parseVerbosity');
+
+           return [
+               $line,
+               Mockery::any(),
+           ];
+       } catch (Exception $e){
+           return [
+               $line,
+           ];
+       }
+    }
+
+    /**
      * @test
      * @group unit
      */
@@ -156,7 +191,7 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<comment>There were no models configured to purge.</comment>')
+                          ->withArgs($this->checkVerbosity('<comment>There were no models configured to purge.</comment>'))
                           ->andReturnNull();
 
         $this->command->handle();
@@ -200,6 +235,11 @@ class PurgeCommandTests extends TestCase
                               'NoneExisting' => 14,
                           ]);
 
+        // Newer versions of laravel style, so give it if not set
+        $this->output_formatter_mock->shouldReceive('hasStyle')
+                                    ->with('warning')
+                                    ->andReturn(false);
+
         $this->output_formatter_mock->shouldReceive('setStyle')
                                     ->once()
                                     ->withArgs([
@@ -215,7 +255,7 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<warning>The model [NoneExisting] was not found.</warning>')
+                          ->withArgs($this->checkVerbosity('<warning>The model [NoneExisting] was not found.</warning>'))
                           ->andReturnNull();
 
         $this->command->handle();
@@ -266,7 +306,7 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<error>The model [NoOnlyTrashed] does not support soft deleting.</error>')
+                          ->withArgs($this->checkVerbosity('<error>The model [NoOnlyTrashed] does not support soft deleting.</error>'))
                           ->andReturnNull();
 
         $this->command->handle();
@@ -317,7 +357,7 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<error>The model [NoForceDelete] does not support soft deleting.</error>')
+                          ->withArgs($this->checkVerbosity('<error>The model [NoForceDelete] does not support soft deleting.</error>'))
                           ->andReturnNull();
 
         $this->command->handle();
@@ -446,27 +486,27 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->twice()
-                          ->with('<info>Deleting all the records in a single query statement.</info>')
+                          ->withArgs($this->checkVerbosity('<info>Deleting all the records in a single query statement.</info>'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14.')
+                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<info>Purged 1 record(s) for ModelOne that was deleted before 14.</info>')
+                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30.')
+                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<info>Purged 0 record(s) for ModelTwo that was deleted before 30.</info>')
+                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'))
                           ->andReturnNull();
 
         $this->command->handle();
@@ -632,7 +672,7 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->twice()
-                          ->with('<info>Deleting each record separately and firing events.</info>')
+                          ->withArgs($this->checkVerbosity('<info>Deleting each record separately and firing events.</info>'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('debug')
@@ -642,7 +682,7 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('Firing event [garbageman.purging: ModelOne] with method [until]')
+                          ->withArgs($this->checkVerbosity('Firing event [garbageman.purging: ModelOne] with method [until]'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('debug')
@@ -652,27 +692,27 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('Firing event [garbageman.purged: ModelOne] with method [until]')
+                          ->withArgs($this->checkVerbosity('Firing event [garbageman.purged: ModelOne] with method [until]'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14.')
+                       ->with('Purged 1 record(s) for ModelOne that was deleted before 14 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<info>Purged 1 record(s) for ModelOne that was deleted before 14.</info>')
+                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'))
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
                        ->once()
-                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30.')
+                       ->with('Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<info>Purged 0 record(s) for ModelTwo that was deleted before 30.</info>')
+                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'))
                           ->andReturnNull();
 
         $this->command->handle();
@@ -721,7 +761,7 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->with('<comment>There were no models configured to purge.</comment>')
+                          ->withArgs($this->checkVerbosity('<comment>There were no models configured to purge.</comment>'))
                           ->andReturnNull();
 
         $this->command->handle();
