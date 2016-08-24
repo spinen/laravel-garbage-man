@@ -16,9 +16,9 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "illuminate/console": "~5.1.10|5.2.*",
-        "illuminate/log": "~5.1.10|5.2.*",
-        "illuminate/support": "~5.1.10|5.2.*",
+        "illuminate/console": "~5.1.10|5.2.*|5.3.*",
+        "illuminate/log": "~5.1.10|5.2.*|5.3.*",
+        "illuminate/support": "~5.1.10|5.2.*|5.3.*",
         "nesbot/carbon": "~1.19"
     },
     "require-dev": {
