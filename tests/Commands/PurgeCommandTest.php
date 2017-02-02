@@ -125,18 +125,18 @@ class PurgeCommandTests extends TestCase
         // Since we are "mocking out" method_exist below, then try to reflect the method
         $reflection = new ReflectionClass(PurgeCommand::class);
 
-       try {
-           $reflection->getMethod('parseVerbosity');
+        try {
+            $reflection->getMethod('parseVerbosity');
 
-           return [
+            return [
                $line,
                Mockery::any(),
-           ];
-       } catch (Exception $e){
-           return [
+            ];
+        } catch (Exception $e) {
+            return [
                $line,
-           ];
-       }
+            ];
+        }
     }
 
     /**
@@ -516,9 +516,9 @@ class PurgeCommandTests extends TestCase
      * @test
      * @group unit
      */
-    public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_fire_events(
-    )
+    public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_fire_events()
     {
+    
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs([
