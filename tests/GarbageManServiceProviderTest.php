@@ -106,4 +106,3 @@ function config_path($file)
 {
     return 'path/to/config/' . $file;
 }
-
