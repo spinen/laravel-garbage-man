@@ -29,6 +29,12 @@ Install Garbage Man:
     $ composer require spinen/laravel-garbage-man
 ```
 
+### For >= Laravel 5.5, you are done with the Install
+
+The package uses the auto registration feature
+
+### For < Laravel 5.5, you have to register the Service Provider
+
 Add the Service Provider to `config/app.php`:
 
 ```php
@@ -36,12 +42,6 @@ Add the Service Provider to `config/app.php`:
         // ...
         Spinen\GarbageMan\GarbageManServiceProvider::class,
     ];
-```
-
-Publish the package config file to `config/garbageman.php`:
-
-```bash
-    $ php artisan vendor:publish
 ```
 
 ## Using the command
@@ -67,15 +67,20 @@ listed on the [Laravel documentation](http://laravel.com/docs/master/scheduling)
 
 ## Configuration
 
-During the install process `config/garbageman.php` is copied to the config directory of the project. That file is fully documented.  You will need to make the changes to that file to suit your needs.
+Publish the package config file to `config/garbageman.php`:
 
-There are 3 main configuration items...
+```bash
+    $ php artisan vendor:publish
+```
+
+This file is fully documented.  You will need to make the changes to that file to suit your needs. There are 3 main configuration items...
 
 1. Fire purge events - Fire events on purge of each record.
 2. Logging level - Level to log.
 3. Schedule - Models & number of days to allow the soft deleted record to stay.
 
 ### Fire purge events (fire\_purge\_events)
+
 Allow hook into the purge of each record by throwing events before & after deleting of each record. There are 2 events thrown:
 
 * garbageman.purging:\<full/model/name\>
@@ -86,6 +91,7 @@ The model is passed with each of the events. The "purging" event is thrown just 
 This is an expensive operation as it requires a SQL command for each record to delete so that the record can be thrown with the events. Therefore, unless you need to catch the events to preform some other action, leave this false to allow all records per model to get deleted with a single SQL call.
 
 ### Logging level (logging_level)
+
 The level that log messages are generated, which will display information on the console output and in the logs.
  
 | Level | Description |
