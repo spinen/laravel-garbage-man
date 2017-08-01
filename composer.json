@@ -16,9 +16,9 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "illuminate/console": "~5.1.10|5.2.*|5.3.*|5.4.*",
-        "illuminate/log": "~5.1.10|5.2.*|5.3.*|5.4.*",
-        "illuminate/support": "~5.1.10|5.2.*|5.3.*|5.4.*",
+        "illuminate/console": "~5.1.10|5.2.*|5.3.*|5.4.*|5.5.*",
+        "illuminate/log": "~5.1.10|5.2.*|5.3.*|5.4.*|5.5.*",
+        "illuminate/support": "~5.1.10|5.2.*|5.3.*|5.4.*|5.5.*",
         "nesbot/carbon": "~1.19"
     },
     "require-dev": {
@@ -38,7 +38,16 @@
             "Spinen\\GarbageMan\\": "tests"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Spinen\\GarbageMan\\GarbageManServiceProvider"
+            ]
+        }
+    },
     "config": {
-        "preferred-install": "dist"
-    }
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
