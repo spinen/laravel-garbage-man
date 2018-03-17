@@ -6,6 +6,7 @@ use ArrayAccess;
 use Countable;
 use Iterator;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
@@ -16,14 +17,7 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
  */
 abstract class TestCase extends PHPUnitTestCase
 {
-    public function tearDown()
-    {
-        if (class_exists('Mockery')) {
-            Mockery::close();
-        }
-
-        parent::tearDown();
-    }
+    use MockeryPHPUnitIntegration;
 
     /**
      * Helper to allow mocking of iterator classes.
