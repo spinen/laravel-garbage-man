@@ -7,14 +7,14 @@ use Countable;
 use Iterator;
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 /**
  * Class TestCase
  *
  * @package Tests\Spinen\BrowserFilter
  */
-abstract class TestCase extends PHPUnit_Framework_TestCase
+abstract class TestCase extends PHPUnitTestCase
 {
     public function tearDown()
     {
@@ -31,7 +31,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @link https://gist.github.com/VladaHejda/8299871
      *
      * @param MockInterface $mock
-     * @param array         $items
+     * @param array $items
      *
      * @return void
      */
@@ -80,7 +80,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
             $mock->shouldReceive('next')
                  ->andReturnUsing(function () use (& $counter) {
-                     ++ $counter;
+                     ++$counter;
                  });
         }
 

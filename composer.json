@@ -22,8 +22,8 @@
         "nesbot/carbon": "~1.19"
     },
     "require-dev": {
-        "mockery/mockery": "^0.9.1",
-        "phpunit/phpunit": "~5.0",
+        "mockery/mockery": "^1",
+        "phpunit/phpunit": "~7.0",
         "psy/psysh": "^0.5.1",
         "satooshi/php-coveralls": "^1",
         "symfony/var-dumper": "~3.0"
