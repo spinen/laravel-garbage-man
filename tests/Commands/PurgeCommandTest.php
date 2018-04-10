@@ -9,9 +9,9 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Log\Writer as Log;
 use Iterator as Collection;
 use Mockery;
+use Psr\Log\LoggerInterface as Log;
 use ReflectionClass;
 use Spinen\GarbageMan\Commands\Stubs\PurgeCommandStub as PurgeCommand;
 use Spinen\GarbageMan\TestCase;
@@ -129,12 +129,12 @@ class PurgeCommandTests extends TestCase
             $reflection->getMethod('parseVerbosity');
 
             return [
-               $line,
-               Mockery::any(),
+                $line,
+                Mockery::any(),
             ];
         } catch (Exception $e) {
             return [
-               $line,
+                $line,
             ];
         }
     }
@@ -156,32 +156,40 @@ class PurgeCommandTests extends TestCase
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(false);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
+                              [
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
                               [
                                   'console' => 6,
                                   'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'console' => 6,
-                              'log'     => 6,
-                          ]);
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
                           ->andReturn([]);
 
         $this->log_mock->shouldReceive('notice')
@@ -191,7 +199,9 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<comment>There were no models configured to purge.</comment>'))
+                          ->withArgs(
+                              $this->checkVerbosity('<comment>There were no models configured to purge.</comment>')
+                          )
                           ->andReturnNull();
 
         $this->command->handle();
@@ -205,35 +215,45 @@ class PurgeCommandTests extends TestCase
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(false);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
+                              [
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
                               [
                                   'console' => 6,
                                   'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'console' => 6,
-                              'log'     => 6,
-                          ]);
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
-                          ->andReturn([
-                              'NoneExisting' => 14,
-                          ]);
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'NoneExisting' => 14,
+                              ]
+                          );
 
         // Newer versions of laravel style, so give it if not set
         $this->output_formatter_mock->shouldReceive('hasStyle')
@@ -242,10 +262,12 @@ class PurgeCommandTests extends TestCase
 
         $this->output_formatter_mock->shouldReceive('setStyle')
                                     ->once()
-                                    ->withArgs([
-                                        'warning',
-                                        Mockery::any(),
-                                    ])
+                                    ->withArgs(
+                                        [
+                                            'warning',
+                                            Mockery::any(),
+                                        ]
+                                    )
                                     ->andReturnNull();
 
         $this->log_mock->shouldReceive('warning')
@@ -255,7 +277,9 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<warning>The model [NoneExisting] was not found.</warning>'))
+                          ->withArgs(
+                              $this->checkVerbosity('<warning>The model [NoneExisting] was not found.</warning>')
+                          )
                           ->andReturnNull();
 
         $this->command->handle();
@@ -269,35 +293,45 @@ class PurgeCommandTests extends TestCase
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(false);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
+                              [
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
                               [
                                   'console' => 6,
                                   'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'console' => 6,
-                              'log'     => 6,
-                          ]);
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
-                          ->andReturn([
-                              'NoOnlyTrashed' => 14,
-                          ]);
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'NoOnlyTrashed' => 14,
+                              ]
+                          );
 
         $this->log_mock->shouldReceive('error')
                        ->once()
@@ -306,7 +340,11 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<error>The model [NoOnlyTrashed] does not support soft deleting.</error>'))
+                          ->withArgs(
+                              $this->checkVerbosity(
+                                  '<error>The model [NoOnlyTrashed] does not support soft deleting.</error>'
+                              )
+                          )
                           ->andReturnNull();
 
         $this->command->handle();
@@ -320,35 +358,45 @@ class PurgeCommandTests extends TestCase
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(false);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
+                              [
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
                               [
                                   'console' => 6,
                                   'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'console' => 6,
-                              'log'     => 6,
-                          ]);
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
-                          ->andReturn([
-                              'NoForceDelete' => 14,
-                          ]);
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'NoForceDelete' => 14,
+                              ]
+                          );
 
         $this->log_mock->shouldReceive('error')
                        ->once()
@@ -357,7 +405,11 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<error>The model [NoForceDelete] does not support soft deleting.</error>'))
+                          ->withArgs(
+                              $this->checkVerbosity(
+                                  '<error>The model [NoForceDelete] does not support soft deleting.</error>'
+                              )
+                          )
                           ->andReturnNull();
 
         $this->command->handle();
@@ -371,36 +423,46 @@ class PurgeCommandTests extends TestCase
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(false);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
+                              [
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
                               [
                                   'console' => 6,
                                   'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'console' => 6,
-                              'log'     => 6,
-                          ]);
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
-                          ->andReturn([
-                              'ModelOne' => 14,
-                              'ModelTwo' => 30,
-                          ]);
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'ModelOne' => 14,
+                                  'ModelTwo' => 30,
+                              ]
+                          );
 
         $carbon_one_mock = $this->carbon_mock;
 
@@ -443,11 +505,13 @@ class PurgeCommandTests extends TestCase
 
         $model_one_mock = Mockery::mock(Model::class);
         $model_one_mock->shouldReceive('where')
-                       ->withArgs([
-                           'deleted_at',
-                           '<',
-                           $carbon_one_mock,
-                       ])
+                       ->withArgs(
+                           [
+                               'deleted_at',
+                               '<',
+                               $carbon_one_mock,
+                           ]
+                       )
                        ->andReturn($builder_one_mock);
 
         $builder_two_mock = Mockery::mock(Builder::class);
@@ -462,11 +526,13 @@ class PurgeCommandTests extends TestCase
 
         $model_two_mock = Mockery::mock(Model::class);
         $model_two_mock->shouldReceive('where')
-                       ->withArgs([
-                           'deleted_at',
-                           '<',
-                           $carbon_two_mock,
-                       ])
+                       ->withArgs(
+                           [
+                               'deleted_at',
+                               '<',
+                               $carbon_two_mock,
+                           ]
+                       )
                        ->andReturn($builder_two_mock);
 
         $this->laravel_mock->shouldReceive('make')
@@ -486,7 +552,11 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->twice()
-                          ->withArgs($this->checkVerbosity('<info>Deleting all the records in a single query statement.</info>'))
+                          ->withArgs(
+                              $this->checkVerbosity(
+                                  '<info>Deleting all the records in a single query statement.</info>'
+                              )
+                          )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
@@ -496,7 +566,11 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'))
+                          ->withArgs(
+                              $this->checkVerbosity(
+                                  '<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'
+                              )
+                          )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
@@ -506,7 +580,11 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'))
+                          ->withArgs(
+                              $this->checkVerbosity(
+                                  '<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'
+                              )
+                          )
                           ->andReturnNull();
 
         $this->command->handle();
@@ -516,41 +594,52 @@ class PurgeCommandTests extends TestCase
      * @test
      * @group unit
      */
-    public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_fire_events()
+    public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_fire_events(
+    )
     {
-    
+
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(true);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
                               [
-                                  'console' => 6,
-                                  'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'console' => 7,
-                              'log'     => 7,
-                          ]);
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'console' => 7,
+                                  'log'     => 7,
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
-                          ->andReturn([
-                              'ModelOne' => 14,
-                              'ModelTwo' => 30,
-                          ]);
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'ModelOne' => 14,
+                                  'ModelTwo' => 30,
+                              ]
+                          );
 
         $carbon_one_mock = $this->carbon_mock;
 
@@ -606,11 +695,13 @@ class PurgeCommandTests extends TestCase
 
         $model_one_mock = Mockery::mock(Model::class);
         $model_one_mock->shouldReceive('where')
-                       ->withArgs([
-                           'deleted_at',
-                           '<',
-                           $carbon_one_mock,
-                       ])
+                       ->withArgs(
+                           [
+                               'deleted_at',
+                               '<',
+                               $carbon_one_mock,
+                           ]
+                       )
                        ->andReturn($builder_one_mock);
 
         $collection_two_mock = Mockery::mock(Collection::class);
@@ -632,11 +723,13 @@ class PurgeCommandTests extends TestCase
 
         $model_two_mock = Mockery::mock(Model::class);
         $model_two_mock->shouldReceive('where')
-                       ->withArgs([
-                           'deleted_at',
-                           '<',
-                           $carbon_two_mock,
-                       ])
+                       ->withArgs(
+                           [
+                               'deleted_at',
+                               '<',
+                               $carbon_two_mock,
+                           ]
+                       )
                        ->andReturn($builder_two_mock);
 
         $this->laravel_mock->shouldReceive('make')
@@ -651,18 +744,22 @@ class PurgeCommandTests extends TestCase
 
         $this->dispatcher_mock->shouldReceive('until')
                               ->once()
-                              ->withArgs([
-                                  'garbageman.purging: ModelOne',
-                                  Mockery::any(),
-                              ])
+                              ->withArgs(
+                                  [
+                                      'garbageman.purging: ModelOne',
+                                      Mockery::any(),
+                                  ]
+                              )
                               ->andReturnNull();
 
         $this->dispatcher_mock->shouldReceive('until')
                               ->once()
-                              ->withArgs([
-                                  'garbageman.purged: ModelOne',
-                                  Mockery::any(),
-                              ])
+                              ->withArgs(
+                                  [
+                                      'garbageman.purged: ModelOne',
+                                      Mockery::any(),
+                                  ]
+                              )
                               ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
@@ -672,7 +769,9 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->twice()
-                          ->withArgs($this->checkVerbosity('<info>Deleting each record separately and firing events.</info>'))
+                          ->withArgs(
+                              $this->checkVerbosity('<info>Deleting each record separately and firing events.</info>')
+                          )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('debug')
@@ -682,7 +781,9 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('Firing event [garbageman.purging: ModelOne] with method [until]'))
+                          ->withArgs(
+                              $this->checkVerbosity('Firing event [garbageman.purging: ModelOne] with method [until]')
+                          )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('debug')
@@ -692,7 +793,9 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('Firing event [garbageman.purged: ModelOne] with method [until]'))
+                          ->withArgs(
+                              $this->checkVerbosity('Firing event [garbageman.purged: ModelOne] with method [until]')
+                          )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
@@ -702,7 +805,11 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'))
+                          ->withArgs(
+                              $this->checkVerbosity(
+                                  '<info>Purged 1 record(s) for ModelOne that was deleted before 14 days ago.</info>'
+                              )
+                          )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('info')
@@ -712,7 +819,11 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'))
+                          ->withArgs(
+                              $this->checkVerbosity(
+                                  '<info>Purged 0 record(s) for ModelTwo that was deleted before 30 days ago.</info>'
+                              )
+                          )
                           ->andReturnNull();
 
         $this->command->handle();
@@ -726,32 +837,40 @@ class PurgeCommandTests extends TestCase
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(false);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
                               [
-                                  'console' => 6,
-                                  'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'bad_console' => 6,
-                              'bad_log'     => 6,
-                          ]);
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'bad_console' => 6,
+                                  'bad_log'     => 6,
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
                           ->andReturn([]);
 
         $this->log_mock->shouldReceive('notice')
@@ -761,7 +880,9 @@ class PurgeCommandTests extends TestCase
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
-                          ->withArgs($this->checkVerbosity('<comment>There were no models configured to purge.</comment>'))
+                          ->withArgs(
+                              $this->checkVerbosity('<comment>There were no models configured to purge.</comment>')
+                          )
                           ->andReturnNull();
 
         $this->command->handle();
@@ -775,32 +896,40 @@ class PurgeCommandTests extends TestCase
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.fire_purge_events',
-                              false,
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.fire_purge_events',
+                                  false,
+                              ]
+                          )
                           ->andReturn(false);
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.logging_level',
+                          ->withArgs(
                               [
-                                  'console' => 6,
+                                  'garbageman.logging_level',
+                                  [
+                                      'console' => 6,
+                                      'log'     => 6,
+                                  ],
+                              ]
+                          )
+                          ->andReturn(
+                              [
+                                  'console' => 0,
                                   'log'     => 6,
-                              ],
-                          ])
-                          ->andReturn([
-                              'console' => 0,
-                              'log'     => 6,
-                          ]);
+                              ]
+                          );
 
         $this->config_mock->shouldReceive('get')
                           ->once()
-                          ->withArgs([
-                              'garbageman.schedule',
-                              [],
-                          ])
+                          ->withArgs(
+                              [
+                                  'garbageman.schedule',
+                                  [],
+                              ]
+                          )
                           ->andReturn([]);
 
         $this->log_mock->shouldReceive('notice')
@@ -817,11 +946,11 @@ class PurgeCommandTests extends TestCase
 }
 
 $fake_models = [
-    'ModelOne'      => [
+    'ModelOne' => [
         'forceDelete',
         'onlyTrashed',
     ],
-    'ModelTwo'      => [
+    'ModelTwo' => [
         'forceDelete',
         'onlyTrashed',
     ],

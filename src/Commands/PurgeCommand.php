@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Log\Writer as Log;
+use Psr\Log\LoggerInterface as Log;
 
 /**
  * Class PurgeCommand
