@@ -12,10 +12,12 @@ The soft deletes are great in Laravel to make sure that some deleted data can be
 
 | Branch | Status | Coverage | Code Quality |
 | ------ | :----: | :------: | :----------: |
-| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=develop)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-garbage-man/badge.svg?branch=develop&service=github)](https://coveralls.io/github/spinen/laravel-garbage-man?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/?branch=develop) |
-| Master | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=master)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Coverage Status](https://coveralls.io/repos/spinen/laravel-garbage-man/badge.svg?branch=master&service=github)](https://coveralls.io/github/spinen/laravel-garbage-man?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/?branch=master) |
+| Develop | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=develop)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Code Coverage](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/?branch=develop) |
+| Master | [![Build Status](https://travis-ci.org/spinen/laravel-garbage-man.svg?branch=master)](https://travis-ci.org/spinen/laravel-garbage-man) | [![Code Coverage](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spinen/laravel-garbage-man/?branch=master) |
 
 ## Prerequisite
+
+#### NOTE: If you need to use < php7.2, please stay with version 1.x
 
 As side from Laravel >= 5.1.10 (5.1.10 is the first version that had the warn method, so that is the minimum for logging), there is 1 package that is required.
 
@@ -32,17 +34,6 @@ Install Garbage Man:
 ### For >= Laravel 5.5, you are done with the Install
 
 The package uses the auto registration feature
-
-### For < Laravel 5.5, you have to register the Service Provider
-
-Add the Service Provider to `config/app.php`:
-
-```php
-    'providers' => [
-        // ...
-        Spinen\GarbageMan\GarbageManServiceProvider::class,
-    ];
-```
 
 ## Using the command
 
