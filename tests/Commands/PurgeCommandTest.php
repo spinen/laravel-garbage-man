@@ -66,7 +66,7 @@ class PurgeCommandTests extends TestCase
      */
     protected $output_mock;
 
-    public function setup() :void
+    public function setup(): void
     {
         parent::setUp();
 
@@ -946,11 +946,11 @@ class PurgeCommandTests extends TestCase
 }
 
 $fake_models = [
-    'ModelOne' => [
+    'ModelOne'      => [
         'forceDelete',
         'onlyTrashed',
     ],
-    'ModelTwo' => [
+    'ModelTwo'      => [
         'forceDelete',
         'onlyTrashed',
     ],

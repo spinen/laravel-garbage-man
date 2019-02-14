@@ -49,7 +49,7 @@ return [
     |       'log'     => 6,
     |   ],
     */
-    'logging_level' => [
+    'logging_level'     => [
         'console' => env('GARBAGEMAN_CONSOLE_LOG_LEVEL', 6),
         'log'     => env('GARBAGEMAN_LOG_LEVEL', 6),
     ],
@@ -69,8 +69,7 @@ return [
     | This would purge any ModelOnes that were deleted over 14 days ago and any
     | ModelTwos that are were deleted over 30 days ago.
     */
-    'schedule'      => [
-        //
+    'schedule'          => [//
     ],
 
 ];

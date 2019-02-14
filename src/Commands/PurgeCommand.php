@@ -91,9 +91,9 @@ class PurgeCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param Carbon     $carbon
+     * @param Carbon $carbon
      * @param Dispatcher $dispatcher
-     * @param Log        $log
+     * @param Log $log
      */
     public function __construct(Carbon $carbon, Dispatcher $dispatcher, Log $log)
     {
@@ -107,9 +107,9 @@ class PurgeCommand extends Command
     /**
      * Fire the given event for the record being purged.
      *
-     * @param string    $event
-     * @param string    $model_name
-     * @param Model     $model
+     * @param string $event
+     * @param string $model_name
+     * @param Model $model
      * @param bool|null $halt
      *
      * @return mixed
@@ -154,7 +154,7 @@ class PurgeCommand extends Command
      * Purge the expired records.
      *
      * @param string $model
-     * @param int    $days
+     * @param int $days
      *
      * @return int|boolean
      */
@@ -182,7 +182,12 @@ class PurgeCommand extends Command
         $count = $this->purgeRecordsAsConfigured($query, $model);
 
         $this->recordMessage(
-            sprintf("Purged %s record(s) for %s that was deleted before %s days ago.", $count, $model, $expiration->toIso8601String())
+            sprintf(
+                "Purged %s record(s) for %s that was deleted before %s days ago.",
+                $count,
+                $model,
+                $expiration->toIso8601String()
+            )
         );
 
         return $count;
@@ -194,7 +199,7 @@ class PurgeCommand extends Command
      * This is to allow events to get fired for each record if needed.
      *
      * @param Builder $query
-     * @param string  $model_name
+     * @param string $model_name
      *
      * @return int
      */
@@ -224,7 +229,7 @@ class PurgeCommand extends Command
     /**
      * Log the action that was taken on the record.
      *
-     * @param string      $message
+     * @param string $message
      * @param string|null $level
      *
      * @return void
