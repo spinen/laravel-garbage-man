@@ -37,7 +37,7 @@ The package uses the auto registration feature
 
 ## Upgrading to 2.x from 1.x
 
-As for Laravel 5.4, the `fire` method on the dispatcher contract was deprecated in favor of `dispatch`, and as of 5.8 the `fire` method has been removed. Therefore, we have updated our code to use `dispatch`.  You will need to change `fire` with `dispatch` in the `config/garbageman.php` file.
+As of Laravel 5.4, the `fire()` method on the dispatcher contract [was deprecated](https://laravel.com/docs/5.4/upgrade) in favor of `dispatch()`, and as of 5.8 the `fire()` method has been removed. Therefore, we have updated our code to use `dispatch()`.  You will need to change `fire()` to `dispatch()` in your `config/garbageman.php` file.
 
 ## Using the command
 
