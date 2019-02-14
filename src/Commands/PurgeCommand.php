@@ -199,7 +199,7 @@ class PurgeCommand extends Command
     /**
      * Either purge all the records at once or loop through them one by one.
      *
-     * This is to allow events to get dispatchd for each record if needed.
+     * This is to allow events to get dispatched for each record if needed.
      *
      * @param Builder $query
      * @param string $model_name
