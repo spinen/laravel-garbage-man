@@ -66,7 +66,7 @@ class PurgeCommandTests extends TestCase
      */
     protected $output_mock;
 
-    public function setUp()
+    public function setup() :void
     {
         parent::setUp();
 

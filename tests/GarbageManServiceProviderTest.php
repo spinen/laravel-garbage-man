@@ -30,7 +30,7 @@ class GarbageManServiceProviderTest extends TestCase
      */
     protected $service_provider;
 
-    public function setUp()
+    public function setup() :void
     {
         parent::setUp();
 
