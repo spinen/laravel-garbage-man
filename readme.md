@@ -66,11 +66,11 @@ Publish the package config file to `config/garbageman.php`:
 
 This file is fully documented.  You will need to make the changes to that file to suit your needs. There are 3 main configuration items...
 
-1. Fire purge events - Fire events on purge of each record.
+1. Dispatch purge events - Dispatch events on purge of each record.
 2. Logging level - Level to log.
 3. Schedule - Models & number of days to allow the soft deleted record to stay.
 
-### Fire purge events (fire\_purge\_events)
+### Dispatch purge events (dispatch\_purge\_events)
 
 Allow hook into the purge of each record by throwing events before & after deleting of each record. There are 2 events thrown:
 
