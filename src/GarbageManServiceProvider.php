@@ -19,9 +19,12 @@ class GarbageManServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            realpath(__DIR__ . '/config/garbageman.php') => config_path('garbageman.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                realpath(__DIR__ . '/config/garbageman.php') => config_path('garbageman.php'),
+            ],
+            'config'
+        );
     }
 
     /**
@@ -31,9 +34,12 @@ class GarbageManServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('command.garbageman.purge', function ($app) {
-            return $app->make(PurgeCommand::class);
-        });
+        $this->app->singleton(
+            'command.garbageman.purge',
+            function ($app) {
+                return $app->make(PurgeCommand::class);
+            }
+        );
 
         $this->commands('command.garbageman.purge');
     }

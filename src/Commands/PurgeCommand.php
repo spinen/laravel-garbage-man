@@ -50,13 +50,13 @@ class PurgeCommand extends Command
     protected $dispatcher;
 
     /**
-     * Fire events when purging?
+     * Dispatch events when purging?
      *
      * This value is used as the default in case there it is not configured.
      *
      * @var bool
      */
-    protected $fire_purge_events = false;
+    protected $dispatch_purge_events = false;
 
     /**
      * Logging instance.
@@ -91,9 +91,9 @@ class PurgeCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param Carbon     $carbon
+     * @param Carbon $carbon
      * @param Dispatcher $dispatcher
-     * @param Log        $log
+     * @param Log $log
      */
     public function __construct(Carbon $carbon, Dispatcher $dispatcher, Log $log)
     {
@@ -105,22 +105,22 @@ class PurgeCommand extends Command
     }
 
     /**
-     * Fire the given event for the record being purged.
+     * Dispatch the given event for the record being purged.
      *
-     * @param string    $event
-     * @param string    $model_name
-     * @param Model     $model
+     * @param string $event
+     * @param string $model_name
+     * @param Model $model
      * @param bool|null $halt
      *
      * @return mixed
      */
-    protected function firePurgeEvent($event, $model_name, Model $model, $halt = true)
+    protected function dispatchPurgeEvent($event, $model_name, Model $model, $halt = true)
     {
         $event = "garbageman.{$event}: " . $model_name;
 
-        $method = $halt ? 'until' : 'fire';
+        $method = $halt ? 'until' : 'dispatch';
 
-        $this->recordMessage(sprintf("Firing event [%s] with method [%s]", $event, $method), 'debug');
+        $this->recordMessage(sprintf("Dispatching event [%s] with method [%s]", $event, $method), 'debug');
 
         return $this->dispatcher->{$method}($event, $model);
     }
@@ -132,8 +132,11 @@ class PurgeCommand extends Command
      */
     public function handle()
     {
-        $this->fire_purge_events = $this->laravel->make('config')
-                                                 ->get('garbageman.fire_purge_events', $this->fire_purge_events);
+        $this->dispatch_purge_events = $this->laravel->make('config')
+                                                     ->get(
+                                                         'garbageman.dispatch_purge_events',
+                                                         $this->dispatch_purge_events
+                                                     );
 
         $this->logging_level = $this->laravel->make('config')
                                              ->get('garbageman.logging_level', $this->logging_level);
@@ -154,7 +157,7 @@ class PurgeCommand extends Command
      * Purge the expired records.
      *
      * @param string $model
-     * @param int    $days
+     * @param int $days
      *
      * @return int|boolean
      */
@@ -182,7 +185,12 @@ class PurgeCommand extends Command
         $count = $this->purgeRecordsAsConfigured($query, $model);
 
         $this->recordMessage(
-            sprintf("Purged %s record(s) for %s that was deleted before %s days ago.", $count, $model, $expiration->toIso8601String())
+            sprintf(
+                "Purged %s record(s) for %s that was deleted before %s days ago.",
+                $count,
+                $model,
+                $expiration->toIso8601String()
+            )
         );
 
         return $count;
@@ -191,31 +199,31 @@ class PurgeCommand extends Command
     /**
      * Either purge all the records at once or loop through them one by one.
      *
-     * This is to allow events to get fired for each record if needed.
+     * This is to allow events to get dispatched for each record if needed.
      *
      * @param Builder $query
-     * @param string  $model_name
+     * @param string $model_name
      *
      * @return int
      */
     protected function purgeRecordsAsConfigured(Builder $query, $model_name)
     {
-        if ($this->fire_purge_events !== true) {
+        if ($this->dispatch_purge_events !== true) {
             $this->recordMessage("Deleting all the records in a single query statement.");
 
             return $query->forceDelete();
         }
 
-        $this->recordMessage("Deleting each record separately and firing events.");
+        $this->recordMessage("Deleting each record separately and dispatching events.");
 
         $records = $query->get();
 
         foreach ($records as $record) {
-            $this->firePurgeEvent('purging', $model_name, $record);
+            $this->dispatchPurgeEvent('purging', $model_name, $record);
 
             $record->forceDelete();
 
-            $this->firePurgeEvent('purged', $model_name, $record);
+            $this->dispatchPurgeEvent('purged', $model_name, $record);
         }
 
         return $records->count();
@@ -224,7 +232,7 @@ class PurgeCommand extends Command
     /**
      * Log the action that was taken on the record.
      *
-     * @param string      $message
+     * @param string $message
      * @param string|null $level
      *
      * @return void
@@ -243,7 +251,7 @@ class PurgeCommand extends Command
             'error'     => 'error',
             'info'      => 'info',
             'notice'    => 'comment',
-            'warning'   => 'warn', // NOTE: Prior to 5.1.10, there was not a warning, so that is the minimum version
+            'warning'   => 'warn',
         ];
 
         if ($this->supposedToLogAtThisLevel($level, 'log')) {

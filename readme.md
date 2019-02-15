@@ -35,6 +35,10 @@ Install Garbage Man:
 
 The package uses the auto registration feature
 
+## Upgrading to 2.x from 1.x
+
+As of Laravel 5.4, the `fire()` method on the dispatcher contract [was deprecated](https://laravel.com/docs/5.4/upgrade) in favor of `dispatch()`, and as of 5.8 the `fire()` method has been removed. Therefore, we have updated our code to use `dispatch()`.  You will need to change `fire()` to `dispatch()` in your `config/garbageman.php` file.
+
 ## Using the command
 
 The command is registered with laravel as ```garbageman:purge```.  You can run it one of 2 ways...
@@ -66,11 +70,11 @@ Publish the package config file to `config/garbageman.php`:
 
 This file is fully documented.  You will need to make the changes to that file to suit your needs. There are 3 main configuration items...
 
-1. Fire purge events - Fire events on purge of each record.
+1. Dispatch purge events - Dispatch events on purge of each record.
 2. Logging level - Level to log.
 3. Schedule - Models & number of days to allow the soft deleted record to stay.
 
-### Fire purge events (fire\_purge\_events)
+### Dispatch purge events (dispatch\_purge\_events)
 
 Allow hook into the purge of each record by throwing events before & after deleting of each record. There are 2 events thrown:
 

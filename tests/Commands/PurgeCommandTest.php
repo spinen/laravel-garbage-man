@@ -66,7 +66,7 @@ class PurgeCommandTests extends TestCase
      */
     protected $output_mock;
 
-    public function setup() :void
+    public function setup(): void
     {
         parent::setUp();
 
@@ -119,6 +119,7 @@ class PurgeCommandTests extends TestCase
      * @param $line
      *
      * @return array
+     * @throws \ReflectionException
      */
     private function checkVerbosity($line)
     {
@@ -158,7 +159,7 @@ class PurgeCommandTests extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
@@ -217,7 +218,7 @@ class PurgeCommandTests extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
@@ -295,7 +296,7 @@ class PurgeCommandTests extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
@@ -360,7 +361,7 @@ class PurgeCommandTests extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
@@ -419,13 +420,13 @@ class PurgeCommandTests extends TestCase
      * @test
      * @group unit
      */
-    public function it_deletes_all_expired_records_for_models_with_soft_delete_when_not_configured_to_fire_events()
+    public function it_deletes_all_expired_records_for_models_with_soft_delete_when_not_configured_to_dispatch_events()
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
@@ -594,7 +595,7 @@ class PurgeCommandTests extends TestCase
      * @test
      * @group unit
      */
-    public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_fire_events(
+    public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_dispatch_events(
     )
     {
 
@@ -602,7 +603,7 @@ class PurgeCommandTests extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
@@ -764,37 +765,43 @@ class PurgeCommandTests extends TestCase
 
         $this->log_mock->shouldReceive('info')
                        ->twice()
-                       ->with('Deleting each record separately and firing events.')
+                       ->with('Deleting each record separately and dispatching events.')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->twice()
                           ->withArgs(
-                              $this->checkVerbosity('<info>Deleting each record separately and firing events.</info>')
+                              $this->checkVerbosity(
+                                  '<info>Deleting each record separately and dispatching events.</info>'
+                              )
                           )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('debug')
                        ->once()
-                       ->with('Firing event [garbageman.purging: ModelOne] with method [until]')
+                       ->with('Dispatching event [garbageman.purging: ModelOne] with method [until]')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
                           ->withArgs(
-                              $this->checkVerbosity('Firing event [garbageman.purging: ModelOne] with method [until]')
+                              $this->checkVerbosity(
+                                  'Dispatching event [garbageman.purging: ModelOne] with method [until]'
+                              )
                           )
                           ->andReturnNull();
 
         $this->log_mock->shouldReceive('debug')
                        ->once()
-                       ->with('Firing event [garbageman.purged: ModelOne] with method [until]')
+                       ->with('Dispatching event [garbageman.purged: ModelOne] with method [until]')
                        ->andReturnNull();
 
         $this->output_mock->shouldReceive('writeln')
                           ->once()
                           ->withArgs(
-                              $this->checkVerbosity('Firing event [garbageman.purged: ModelOne] with method [until]')
+                              $this->checkVerbosity(
+                                  'Dispatching event [garbageman.purged: ModelOne] with method [until]'
+                              )
                           )
                           ->andReturnNull();
 
@@ -839,7 +846,7 @@ class PurgeCommandTests extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
@@ -898,7 +905,7 @@ class PurgeCommandTests extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  'garbageman.fire_purge_events',
+                                  'garbageman.dispatch_purge_events',
                                   false,
                               ]
                           )
