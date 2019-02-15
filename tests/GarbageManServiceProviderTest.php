@@ -30,7 +30,7 @@ class GarbageManServiceProviderTest extends TestCase
      */
     protected $service_provider;
 
-    public function setUp()
+    public function setup(): void
     {
         parent::setUp();
 
@@ -77,14 +77,21 @@ class GarbageManServiceProviderTest extends TestCase
 
         $this->application_mock->shouldReceive('singleton')
                                ->once()
-                               ->withArgs([
-                                   'command.garbageman.purge',
-                                   Mockery::on(function ($closure) {
-                                       $this->assertInstanceOf(PurgeCommand::class, $closure($this->application_mock));
+                               ->withArgs(
+                                   [
+                                       'command.garbageman.purge',
+                                       Mockery::on(
+                                           function ($closure) {
+                                               $this->assertInstanceOf(
+                                                   PurgeCommand::class,
+                                                   $closure($this->application_mock)
+                                               );
 
-                                       return true;
-                                   }),
-                               ])
+                                               return true;
+                                           }
+                                       ),
+                                   ]
+                               )
                                ->andReturnNull();
 
         $this->assertNull($this->service_provider->register());

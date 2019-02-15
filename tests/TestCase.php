@@ -49,32 +49,42 @@ abstract class TestCase extends PHPUnitTestCase
             $counter = 0;
 
             $mock->shouldReceive('rewind')
-                 ->andReturnUsing(function () use (& $counter) {
-                     $counter = 0;
-                 });
+                 ->andReturnUsing(
+                     function () use (& $counter) {
+                         $counter = 0;
+                     }
+                 );
 
             $vals = array_values($items);
             $keys = array_values(array_keys($items));
 
             $mock->shouldReceive('valid')
-                 ->andReturnUsing(function () use (& $counter, $vals) {
-                     return isset($vals[$counter]);
-                 });
+                 ->andReturnUsing(
+                     function () use (& $counter, $vals) {
+                         return isset($vals[$counter]);
+                     }
+                 );
 
             $mock->shouldReceive('current')
-                 ->andReturnUsing(function () use (& $counter, $vals) {
-                     return $vals[$counter];
-                 });
+                 ->andReturnUsing(
+                     function () use (& $counter, $vals) {
+                         return $vals[$counter];
+                     }
+                 );
 
             $mock->shouldReceive('key')
-                 ->andReturnUsing(function () use (& $counter, $keys) {
-                     return $keys[$counter];
-                 });
+                 ->andReturnUsing(
+                     function () use (& $counter, $keys) {
+                         return $keys[$counter];
+                     }
+                 );
 
             $mock->shouldReceive('next')
-                 ->andReturnUsing(function () use (& $counter) {
-                     ++$counter;
-                 });
+                 ->andReturnUsing(
+                     function () use (& $counter) {
+                         ++$counter;
+                     }
+                 );
         }
 
         if ($mock instanceof Countable) {
