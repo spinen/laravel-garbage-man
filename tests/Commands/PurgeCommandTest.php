@@ -19,7 +19,12 @@ use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PurgeCommandTests extends TestCase
+/**
+ * Class PurgeCommandTest
+ *
+ * @package Spinen\GarbageMan\Commands
+ */
+class PurgeCommandTest extends TestCase
 {
     /**
      * @var Mockery\Mock

@@ -19,7 +19,7 @@
          verbose="true">
 
     <testsuites>
-        <testsuite name="Library Test Suite">
+        <testsuite name="Spinen's Laravel Garbage Man">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
@@ -32,7 +32,6 @@
         <whitelist>
             <directory suffix=".php">src/</directory>
             <exclude>
-                <!--<file>src/file.php</file>-->
                 <directory suffix=".php">src/config</directory>
             </exclude>
         </whitelist>
