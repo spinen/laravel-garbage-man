@@ -8,6 +8,11 @@ use Illuminate\Support\ServiceProvider;
 use Mockery;
 use Spinen\GarbageMan\Commands\PurgeCommand;
 
+/**
+ * Class GarbageManServiceProviderTest
+ *
+ * @package Spinen\GarbageMan
+ */
 class GarbageManServiceProviderTest extends TestCase
 {
     /**

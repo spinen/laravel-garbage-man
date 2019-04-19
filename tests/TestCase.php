@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 /**
  * Class TestCase
  *
- * @package Tests\Spinen\BrowserFilter
+ * @package Tests\Spinen\GarbageMan
  */
 abstract class TestCase extends PHPUnitTestCase
 {
