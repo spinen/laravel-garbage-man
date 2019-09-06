@@ -169,7 +169,7 @@ class PurgeCommand extends Command
             return false;
         }
 
-        if (!method_exists($model, 'onlyTrashed') || !method_exists($model, 'forceDelete')) {
+        if (!method_exists($model, 'forceDelete')) {
             $this->recordMessage(sprintf("The model [%s] does not support soft deleting.", $model), 'error');
 
             return false;

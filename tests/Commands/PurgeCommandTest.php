@@ -19,7 +19,12 @@ use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PurgeCommandTests extends TestCase
+/**
+ * Class PurgeCommandTest
+ *
+ * @package Spinen\GarbageMan\Commands
+ */
+class PurgeCommandTest extends TestCase
 {
     /**
      * @var Mockery\Mock
@@ -212,7 +217,7 @@ class PurgeCommandTests extends TestCase
      * @test
      * @group unit
      */
-    public function it_warns_on_models_in_the_config_that_does_not_exists()
+    public function it_warns_on_models_in_the_config_that_do_not_exist()
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
@@ -290,72 +295,7 @@ class PurgeCommandTests extends TestCase
      * @test
      * @group unit
      */
-    public function it_errors_on_models_in_the_config_that_does_not_have_onlyTrashed()
-    {
-        $this->config_mock->shouldReceive('get')
-                          ->once()
-                          ->withArgs(
-                              [
-                                  'garbageman.dispatch_purge_events',
-                                  false,
-                              ]
-                          )
-                          ->andReturn(false);
-
-        $this->config_mock->shouldReceive('get')
-                          ->once()
-                          ->withArgs(
-                              [
-                                  'garbageman.logging_level',
-                                  [
-                                      'console' => 6,
-                                      'log'     => 6,
-                                  ],
-                              ]
-                          )
-                          ->andReturn(
-                              [
-                                  'console' => 6,
-                                  'log'     => 6,
-                              ]
-                          );
-
-        $this->config_mock->shouldReceive('get')
-                          ->once()
-                          ->withArgs(
-                              [
-                                  'garbageman.schedule',
-                                  [],
-                              ]
-                          )
-                          ->andReturn(
-                              [
-                                  'NoOnlyTrashed' => 14,
-                              ]
-                          );
-
-        $this->log_mock->shouldReceive('error')
-                       ->once()
-                       ->with('The model [NoOnlyTrashed] does not support soft deleting.')
-                       ->andReturnNull();
-
-        $this->output_mock->shouldReceive('writeln')
-                          ->once()
-                          ->withArgs(
-                              $this->checkVerbosity(
-                                  '<error>The model [NoOnlyTrashed] does not support soft deleting.</error>'
-                              )
-                          )
-                          ->andReturnNull();
-
-        $this->command->handle();
-    }
-
-    /**
-     * @test
-     * @group unit
-     */
-    public function it_errors_on_models_in_the_config_that_does_not_have_forceDelete()
+    public function it_errors_on_models_in_the_config_that_do_not_have_forceDelete()
     {
         $this->config_mock->shouldReceive('get')
                           ->once()
@@ -598,7 +538,6 @@ class PurgeCommandTests extends TestCase
     public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_dispatch_events(
     )
     {
-
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs(
