@@ -7,8 +7,6 @@ use Spinen\GarbageMan\Commands\PurgeCommand;
 
 /**
  * Class GarbageManServiceProvider
- *
- * @package Spinen\GarbageMan
  */
 class GarbageManServiceProvider extends ServiceProvider
 {
@@ -21,7 +19,7 @@ class GarbageManServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [
-                realpath(__DIR__ . '/config/garbageman.php') => config_path('garbageman.php'),
+                realpath(__DIR__.'/config/garbageman.php') => config_path('garbageman.php'),
             ],
             'config'
         );

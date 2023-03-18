@@ -11,8 +11,6 @@ use Psr\Log\LoggerInterface as Log;
 
 /**
  * Class PurgeCommand
- *
- * @package Spinen\GarbageMan\Commands
  */
 class PurgeCommand extends Command
 {
@@ -39,7 +37,7 @@ class PurgeCommand extends Command
      */
     protected $logging_level = [
         'console' => 6,
-        'log'     => 6,
+        'log' => 6,
     ];
 
     /**
@@ -71,14 +69,14 @@ class PurgeCommand extends Command
      * @var array
      */
     protected $log_levels = [
-        'alert'     => 1,
-        'critical'  => 2,
-        'debug'     => 7,
+        'alert' => 1,
+        'critical' => 2,
+        'debug' => 7,
         'emergency' => 0,
-        'error'     => 3,
-        'info'      => 6,
-        'notice'    => 5,
-        'warning'   => 4,
+        'error' => 3,
+        'info' => 6,
+        'notice' => 5,
+        'warning' => 4,
     ];
 
     /**
@@ -90,10 +88,6 @@ class PurgeCommand extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @param Carbon $carbon
-     * @param Dispatcher $dispatcher
-     * @param Log $log
      */
     public function __construct(Carbon $carbon, Dispatcher $dispatcher, Log $log)
     {
@@ -106,21 +100,14 @@ class PurgeCommand extends Command
 
     /**
      * Dispatch the given event for the record being purged.
-     *
-     * @param string $event
-     * @param string $model_name
-     * @param Model $model
-     * @param bool|null $halt
-     *
-     * @return mixed
      */
-    protected function dispatchPurgeEvent($event, $model_name, Model $model, $halt = true)
+    protected function dispatchPurgeEvent(string $event, string $model_name, Model $model, ?bool $halt = true): ?bool
     {
-        $event = "garbageman.{$event}: " . $model_name;
+        $event = "garbageman.{$event}: ".$model_name;
 
         $method = $halt ? 'until' : 'dispatch';
 
-        $this->recordMessage(sprintf("Dispatching event [%s] with method [%s]", $event, $method), 'debug');
+        $this->recordMessage(sprintf('Dispatching event [%s] with method [%s]', $event, $method), 'debug');
 
         return $this->dispatcher->{$method}($event, $model);
     }
@@ -149,28 +136,23 @@ class PurgeCommand extends Command
         }
 
         if (count($schedule) < 1) {
-            $this->recordMessage("There were no models configured to purge.", 'notice');
+            $this->recordMessage('There were no models configured to purge.', 'notice');
         }
     }
 
     /**
      * Purge the expired records.
-     *
-     * @param string $model
-     * @param int $days
-     *
-     * @return int|boolean
      */
-    protected function purgeExpiredRecordsForModel($model, $days)
+    protected function purgeExpiredRecordsForModel(string $model, int $days): int|bool
     {
-        if (!class_exists($model)) {
-            $this->recordMessage(sprintf("The model [%s] was not found.", $model), 'warning');
+        if (! class_exists($model)) {
+            $this->recordMessage(sprintf('The model [%s] was not found.', $model), 'warning');
 
             return false;
         }
 
-        if (!method_exists($model, 'forceDelete')) {
-            $this->recordMessage(sprintf("The model [%s] does not support soft deleting.", $model), 'error');
+        if (! method_exists($model, 'forceDelete')) {
+            $this->recordMessage(sprintf('The model [%s] does not support soft deleting.', $model), 'error');
 
             return false;
         }
@@ -186,7 +168,7 @@ class PurgeCommand extends Command
 
         $this->recordMessage(
             sprintf(
-                "Purged %s record(s) for %s that was deleted before %s days ago.",
+                'Purged %s record(s) for %s that was deleted before %s days ago.',
                 $count,
                 $model,
                 $expiration->toIso8601String()
@@ -200,21 +182,16 @@ class PurgeCommand extends Command
      * Either purge all the records at once or loop through them one by one.
      *
      * This is to allow events to get dispatched for each record if needed.
-     *
-     * @param Builder $query
-     * @param string $model_name
-     *
-     * @return int
      */
-    protected function purgeRecordsAsConfigured(Builder $query, $model_name)
+    protected function purgeRecordsAsConfigured(Builder $query, string $model_name): int
     {
         if ($this->dispatch_purge_events !== true) {
-            $this->recordMessage("Deleting all the records in a single query statement.");
+            $this->recordMessage('Deleting all the records in a single query statement.');
 
             return $query->forceDelete();
         }
 
-        $this->recordMessage("Deleting each record separately and dispatching events.");
+        $this->recordMessage('Deleting each record separately and dispatching events.');
 
         $records = $query->get();
 
@@ -231,27 +208,22 @@ class PurgeCommand extends Command
 
     /**
      * Log the action that was taken on the record.
-     *
-     * @param string $message
-     * @param string|null $level
-     *
-     * @return void
      */
-    protected function recordMessage($message, $level = null)
+    protected function recordMessage(string $message, ?string $level = null): void
     {
         if (is_null($level)) {
             $level = 'info';
         }
 
         $console_map = [
-            'alert'     => 'error',
-            'critical'  => 'error',
-            'debug'     => 'line',
+            'alert' => 'error',
+            'critical' => 'error',
+            'debug' => 'line',
             'emergency' => 'error',
-            'error'     => 'error',
-            'info'      => 'info',
-            'notice'    => 'comment',
-            'warning'   => 'warn',
+            'error' => 'error',
+            'info' => 'info',
+            'notice' => 'comment',
+            'warning' => 'warn',
         ];
 
         if ($this->supposedToLogAtThisLevel($level, 'log')) {
@@ -267,15 +239,10 @@ class PurgeCommand extends Command
      * Decide if the system is supposed to log for the level.
      *
      * Default to true, if not configured.
-     *
-     * @param string $level
-     * @param string $type
-     *
-     * @return bool
      */
-    protected function supposedToLogAtThisLevel($level, $type)
+    protected function supposedToLogAtThisLevel(string $level, string $type): bool
     {
-        if (!array_key_exists($type, $this->logging_level)) {
+        if (! array_key_exists($type, $this->logging_level)) {
             return true;
         }
 
