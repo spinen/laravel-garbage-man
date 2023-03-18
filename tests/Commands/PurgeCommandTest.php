@@ -21,8 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class PurgeCommandTest
- *
- * @package Spinen\GarbageMan\Commands
  */
 class PurgeCommandTest extends TestCase
 {
@@ -121,9 +119,8 @@ class PurgeCommandTest extends TestCase
      *
      * @see https://github.com/laravel/framework/commit/2f167031ca7d9660d3524d16cbba24eae5c759d7
      *
-     * @param $line
-     *
      * @return array
+     *
      * @throws \ReflectionException
      */
     private function checkVerbosity($line)
@@ -147,6 +144,7 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_can_be_constructed()
@@ -156,6 +154,7 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_writes_a_comment_if_there_are_no_models_configured()
@@ -177,14 +176,14 @@ class PurgeCommandTest extends TestCase
                                   'garbageman.logging_level',
                                   [
                                       'console' => 6,
-                                      'log'     => 6,
+                                      'log' => 6,
                                   ],
                               ]
                           )
                           ->andReturn(
                               [
                                   'console' => 6,
-                                  'log'     => 6,
+                                  'log' => 6,
                               ]
                           );
 
@@ -215,6 +214,7 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_warns_on_models_in_the_config_that_do_not_exist()
@@ -236,14 +236,14 @@ class PurgeCommandTest extends TestCase
                                   'garbageman.logging_level',
                                   [
                                       'console' => 6,
-                                      'log'     => 6,
+                                      'log' => 6,
                                   ],
                               ]
                           )
                           ->andReturn(
                               [
                                   'console' => 6,
-                                  'log'     => 6,
+                                  'log' => 6,
                               ]
                           );
 
@@ -293,6 +293,7 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_errors_on_models_in_the_config_that_do_not_have_forceDelete()
@@ -314,14 +315,14 @@ class PurgeCommandTest extends TestCase
                                   'garbageman.logging_level',
                                   [
                                       'console' => 6,
-                                      'log'     => 6,
+                                      'log' => 6,
                                   ],
                               ]
                           )
                           ->andReturn(
                               [
                                   'console' => 6,
-                                  'log'     => 6,
+                                  'log' => 6,
                               ]
                           );
 
@@ -358,6 +359,7 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_deletes_all_expired_records_for_models_with_soft_delete_when_not_configured_to_dispatch_events()
@@ -379,14 +381,14 @@ class PurgeCommandTest extends TestCase
                                   'garbageman.logging_level',
                                   [
                                       'console' => 6,
-                                      'log'     => 6,
+                                      'log' => 6,
                                   ],
                               ]
                           )
                           ->andReturn(
                               [
                                   'console' => 6,
-                                  'log'     => 6,
+                                  'log' => 6,
                               ]
                           );
 
@@ -533,11 +535,11 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_deletes_each_expired_record_for_models_and_throws_events_with_soft_delete_when_configured_to_dispatch_events(
-    )
-    {
+    ) {
         $this->config_mock->shouldReceive('get')
                           ->once()
                           ->withArgs(
@@ -555,14 +557,14 @@ class PurgeCommandTest extends TestCase
                                   'garbageman.logging_level',
                                   [
                                       'console' => 6,
-                                      'log'     => 6,
+                                      'log' => 6,
                                   ],
                               ]
                           )
                           ->andReturn(
                               [
                                   'console' => 7,
-                                  'log'     => 7,
+                                  'log' => 7,
                               ]
                           );
 
@@ -777,6 +779,7 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_defaults_to_log_even_if_the_configs_dont_have_needed_key()
@@ -798,14 +801,14 @@ class PurgeCommandTest extends TestCase
                                   'garbageman.logging_level',
                                   [
                                       'console' => 6,
-                                      'log'     => 6,
+                                      'log' => 6,
                                   ],
                               ]
                           )
                           ->andReturn(
                               [
                                   'bad_console' => 6,
-                                  'bad_log'     => 6,
+                                  'bad_log' => 6,
                               ]
                           );
 
@@ -836,6 +839,7 @@ class PurgeCommandTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_does_not_log_if_alert_is_higher_than_allowed()
@@ -857,14 +861,14 @@ class PurgeCommandTest extends TestCase
                                   'garbageman.logging_level',
                                   [
                                       'console' => 6,
-                                      'log'     => 6,
+                                      'log' => 6,
                                   ],
                               ]
                           )
                           ->andReturn(
                               [
                                   'console' => 0,
-                                  'log'     => 6,
+                                  'log' => 6,
                               ]
                           );
 

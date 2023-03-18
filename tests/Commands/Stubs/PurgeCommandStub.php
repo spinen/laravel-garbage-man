@@ -8,15 +8,12 @@ use Spinen\GarbageMan\Commands\PurgeCommand;
  * Class PurgeCommandStub
  *
  * Wrapper over the class to allow setting some properties for testing.
- *
- * @package Spinen\GarbageMan\Commands\Stubs
  */
 class PurgeCommandStub extends PurgeCommand
 {
     /**
      * Set the input.
      *
-     * @param $input
      *
      * @return $this
      */
@@ -30,7 +27,6 @@ class PurgeCommandStub extends PurgeCommand
     /**
      * Set the output.
      *
-     * @param $output
      *
      * @return $this
      */

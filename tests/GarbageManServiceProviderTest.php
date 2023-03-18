@@ -10,8 +10,6 @@ use Spinen\GarbageMan\Commands\PurgeCommand;
 
 /**
  * Class GarbageManServiceProviderTest
- *
- * @package Spinen\GarbageMan
  */
 class GarbageManServiceProviderTest extends TestCase
 {
@@ -62,6 +60,7 @@ class GarbageManServiceProviderTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_can_be_constructed()
@@ -71,6 +70,7 @@ class GarbageManServiceProviderTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_registers_the_purge_command_mock()
@@ -104,6 +104,7 @@ class GarbageManServiceProviderTest extends TestCase
 
     /**
      * @test
+     *
      * @group unit
      */
     public function it_boots_the_service()
@@ -116,5 +117,5 @@ class GarbageManServiceProviderTest extends TestCase
 
 function config_path($file)
 {
-    return 'path/to/config/' . $file;
+    return 'path/to/config/'.$file;
 }
